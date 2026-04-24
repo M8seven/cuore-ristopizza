@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Phone, Mail, MessageCircle, MapPin, Clock } from '@lucide/astro';
+import { BUSINESS } from '../data/business';
+
+const mapsQuery = encodeURIComponent(
+  `${BUSINESS.address.street}, ${BUSINESS.address.postal} ${BUSINESS.address.city} ${BUSINESS.address.region}`
+);
+const mapsEmbedSrc = `https://www.google.com/maps?q=${mapsQuery}&output=embed`;
+
+const groupedHours = [
+  { label: 'Martedì — Sabato', slots: ['11:30 — 14:30', '18:30 — 22:00'] },
+  { label: 'Domenica', slots: ['18:30 — 22:00'] },
+  { label: 'Lunedì', slots: ['Chiuso'], closed: true },
+];
+---
+
+<BaseLayout
+  title="Contatti"
+  description={`Chiama o scrivi a ${BUSINESS.name}: ${BUSINESS.address.street}, ${BUSINESS.address.city}. Prenotazioni, informazioni e ordini d'asporto.`}
+>
+  <section class="pt-12 md:pt-20 pb-12">
+    <div class="max-w-6xl mx-auto px-5 md:px-8">
+      <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">Contatti</p>
+      <h1 class="mt-3 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl">
+        Parliamone.
+      </h1>
+      <p class="mt-5 max-w-3xl text-lg text-[var(--color-ink-soft)] leading-relaxed">
+        Prenotazioni, ordini d'asporto o una domanda? Il modo più veloce per raggiungerci è il telefono o WhatsApp.
+      </p>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        <a
+          href={BUSINESS.phoneHref}
+          class="p-6 rounded-[var(--radius-card-lg)] bg-white border border-black/5 shadow-sm hover:shadow-md transition-shadow"
+        >
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+            <Phone size={22} aria-hidden="true" />
+          </span>
+          <h2 class="mt-5 text-lg font-semibold">Telefono</h2>
+          <p class="mt-1 text-[var(--color-ink-soft)]">{BUSINESS.phone}</p>
+        </a>
+
+        <a
+          href={BUSINESS.whatsappHref}
+          target="_blank"
+          rel="noopener"
+          class="p-6 rounded-[var(--radius-card-lg)] bg-white border border-black/5 shadow-sm hover:shadow-md transition-shadow"
+        >
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-whatsapp)]/15 text-[var(--color-whatsapp-dark)]">
+            <MessageCircle size={22} aria-hidden="true" />
+          </span>
+          <h2 class="mt-5 text-lg font-semibold">WhatsApp</h2>
+          <p class="mt-1 text-[var(--color-ink-soft)]">Ordina e prenota in chat</p>
+        </a>
+
+        <a
+          href={`mailto:${BUSINESS.email}`}
+          class="p-6 rounded-[var(--radius-card-lg)] bg-white border border-black/5 shadow-sm hover:shadow-md transition-shadow"
+        >
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-black/5 text-[var(--color-ink)]">
+            <Mail size={22} aria-hidden="true" />
+          </span>
+          <h2 class="mt-5 text-lg font-semibold">Email</h2>
+          <p class="mt-1 text-[var(--color-ink-soft)] break-all">{BUSINESS.email}</p>
+        </a>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-2">
+        <article class="p-7 rounded-[var(--radius-card-lg)] bg-white border border-black/5 shadow-sm">
+          <h2 class="flex items-center gap-2 text-xl font-bold">
+            <MapPin size={20} aria-hidden="true" /> Dove siamo
+          </h2>
+          <p class="mt-3 text-[var(--color-ink-soft)]">
+            {BUSINESS.address.street}<br />
+            {BUSINESS.address.postal} {BUSINESS.address.city} ({BUSINESS.address.region}) — {BUSINESS.address.countryName}
+          </p>
+          <a
+            href={`https://maps.google.com/?q=${mapsQuery}`}
+            target="_blank"
+            rel="noopener"
+            class="mt-4 inline-flex items-center gap-2 text-[var(--color-accent)] font-semibold hover:underline"
+          >
+            Apri in Google Maps →
+          </a>
+        </article>
+
+        <article class="p-7 rounded-[var(--radius-card-lg)] bg-white border border-black/5 shadow-sm">
+          <h2 class="flex items-center gap-2 text-xl font-bold">
+            <Clock size={20} aria-hidden="true" /> Orari
+          </h2>
+          <ul class="mt-3 space-y-3">
+            {groupedHours.map((g) => (
+              <li>
+                <p class="font-medium">{g.label}</p>
+                <p class={g.closed ? 'text-[var(--color-accent)] font-medium' : 'text-[var(--color-ink-soft)]'}>
+                  {g.slots.join(' · ')}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </article>
+      </div>
+
+      <div class="mt-12 rounded-[var(--radius-card-lg)] overflow-hidden border border-black/5 shadow-sm">
+        <iframe
+          title="Mappa Cuore Ristopizza"
+          src={mapsEmbedSrc}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="w-full h-[420px] block"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

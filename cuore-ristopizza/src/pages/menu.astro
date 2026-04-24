@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InteractiveMenu from '../components/InteractiveMenu.astro';
+import MonthlySpecialFeatured from '../components/MonthlySpecialFeatured.astro';
+---
+
+<BaseLayout
+  title="Menu"
+  description="Menu della pizzeria Cuore Ristopizza a Cogliate: pizze classiche, pizze speciali della casa, sfizi e dolci. Impasti ad alta digeribilità (9 cereali, integrale, farro)."
+>
+  <section class="pt-12 md:pt-20 pb-6 md:pb-10">
+    <div class="max-w-6xl mx-auto px-5 md:px-8">
+      <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">Il Menu</p>
+      <h1 class="mt-3 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl">
+        Il nostro menu
+      </h1>
+      <p class="mt-5 max-w-3xl text-lg text-[var(--color-ink-soft)] leading-relaxed">
+        Tutte le nostre proposte, con ingredienti e prezzi aggiornati. Chiedi in sala per impasti
+        speciali e formato mezzo metro.
+      </p>
+    </div>
+  </section>
+  <MonthlySpecialFeatured />
+  <InteractiveMenu />
+</BaseLayout>

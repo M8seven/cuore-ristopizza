@@ -1,0 +1,56 @@
+---
+import { Wheat, Heart, PawPrint } from '@lucide/astro';
+
+const pillars = [
+  {
+    icon: Wheat,
+    title: 'Lombardia incontra il Mezzogiorno',
+    body:
+      "La nostra identità culinaria è ibrida: ricette del Sud e materie prime del territorio, assemblate con rispetto della tradizione e spirito di ricerca.",
+  },
+  {
+    icon: Heart,
+    title: 'Impasti ad alta digeribilità',
+    body:
+      '9 cereali, integrale, farro. Lievitazioni lunghe e farine selezionate, perché la pizza debba essere un piacere, non un sacrificio.',
+  },
+  {
+    icon: PawPrint,
+    title: 'Accoglienza vera',
+    body:
+      'Sala interna, angolo bambini per le famiglie e animali di compagnia benvenuti: ti vogliamo a casa tua.',
+  },
+];
+---
+
+<section class="py-20 md:py-28" id="manifesto" aria-labelledby="manifesto-title">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="max-w-3xl">
+      <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">
+        Il nostro manifesto
+      </p>
+      <h2
+        id="manifesto-title"
+        class="mt-3 font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl"
+      >
+        La nostra pizza racconta una storia.
+      </h2>
+      <p class="mt-5 text-lg text-[var(--color-ink-soft)] leading-relaxed">
+        Da Cogliate, con ingredienti che attraversano l'Italia. Ogni trancio è il risultato di
+        scelte attente, fatte per chi vuole mangiare bene senza complicazioni.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-6 md:grid-cols-3">
+      {pillars.map((p) => (
+        <article class="p-7 rounded-[var(--radius-card-lg)] bg-white shadow-sm shadow-black/5 border border-black/5">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+            <p.icon size={22} aria-hidden="true" />
+          </div>
+          <h3 class="mt-5 text-xl font-bold">{p.title}</h3>
+          <p class="mt-3 text-[var(--color-ink-soft)] leading-relaxed">{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { BUSINESS } from '../data/business';
+
+const lastUpdate = '25 aprile 2026';
+---
+
+<BaseLayout title="Privacy Policy" description="Informativa sul trattamento dei dati personali di Cuore Ristopizza." noindex={true}>
+  <article class="max-w-3xl mx-auto px-5 md:px-8 py-16 prose-like">
+    <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">Legale</p>
+    <h1 class="mt-3 font-[family-name:var(--font-display)] font-bold text-4xl md:text-5xl">Privacy Policy</h1>
+    <p class="mt-3 text-sm text-[var(--color-ink-soft)]">Ultimo aggiornamento: {lastUpdate}</p>
+
+    <p class="mt-10 italic text-[var(--color-ink-soft)] bg-amber-50 border border-amber-200 p-4 rounded-[var(--radius-card)]">
+      Placeholder tecnico. Da far revisionare da un legale o dal DPO del cliente prima della messa online.
+    </p>
+
+    <section class="mt-10 space-y-6 text-[var(--color-ink-soft)] leading-relaxed">
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)] mt-8 mb-3">1. Titolare del trattamento</h2>
+        <p>
+          Il titolare del trattamento dei dati è {BUSINESS.name}, {BUSINESS.address.street},
+          {BUSINESS.address.postal} {BUSINESS.address.city} ({BUSINESS.address.region}). Email:
+          <a href={`mailto:${BUSINESS.email}`} class="text-[var(--color-accent)]">{BUSINESS.email}</a>.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)] mt-8 mb-3">2. Dati raccolti</h2>
+        <p>
+          Il sito non richiede registrazione e non raccoglie attivamente dati personali. Gli unici dati
+          trattati sono quelli che l'utente fornisce volontariamente contattandoci via WhatsApp,
+          telefono o email, limitatamente a quanto necessario per rispondere alla richiesta.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)] mt-8 mb-3">3. Finalità</h2>
+        <p>
+          I dati di contatto forniti sono utilizzati esclusivamente per evadere la richiesta (prenotazione,
+          ordine d'asporto, informazione). Non sono ceduti a terzi né utilizzati per attività di marketing.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)] mt-8 mb-3">4. Cookie e tracciamento</h2>
+        <p>
+          Il sito utilizza solo cookie tecnici strettamente necessari al funzionamento. Non sono
+          installati cookie di profilazione né strumenti di analytics. Vedi la
+          <a href="/cookie-policy" class="text-[var(--color-accent)]">cookie policy</a> per il dettaglio.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)] mt-8 mb-3">5. Google Maps</h2>
+        <p>
+          Nelle pagine del sito è integrata una mappa fornita da Google Maps. Quando la mappa viene
+          caricata, Google può raccogliere dati tecnici (es. indirizzo IP) secondo la propria privacy policy.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)] mt-8 mb-3">6. Diritti dell'interessato</h2>
+        <p>
+          Ai sensi del Regolamento UE 2016/679 (GDPR), l'utente ha diritto di accesso, rettifica,
+          cancellazione, limitazione e opposizione al trattamento. Per esercitare questi diritti è possibile
+          scrivere a <a href={`mailto:${BUSINESS.email}`} class="text-[var(--color-accent)]">{BUSINESS.email}</a>.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

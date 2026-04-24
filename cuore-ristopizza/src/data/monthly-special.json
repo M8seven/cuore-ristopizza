@@ -1,0 +1,8 @@
+{
+  "name": "Zuccaccio",
+  "price": 8.00,
+  "ingredients": ["crema di zucca", "salsiccia", "porcini", "caciocavallo"],
+  "description": "La pizza del mese: crema di zucca vellutata, salsiccia fresca, porcini profumati e caciocavallo filante.",
+  "month": "2026-04",
+  "available": true
+}

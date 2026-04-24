@@ -1,0 +1,52 @@
+---
+import { ArrowRight, Phone } from '@lucide/astro';
+import { BUSINESS } from '../data/business';
+
+// Unsplash placeholder — swap with real photo pre-deploy
+const heroImage =
+  'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80';
+---
+
+<section class="relative overflow-hidden" aria-label="Hero">
+  <div class="absolute inset-0 -z-10">
+    <img
+      src={heroImage}
+      alt=""
+      aria-hidden="true"
+      fetchpriority="high"
+      decoding="async"
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/65"></div>
+  </div>
+
+  <div class="relative max-w-5xl mx-auto px-5 md:px-8 py-28 md:py-36 lg:py-44 text-white">
+    <p class="font-[family-name:var(--font-display)] text-sm md:text-base tracking-[0.3em] uppercase opacity-80">
+      {BUSINESS.name} · Cogliate
+    </p>
+    <h1 class="mt-6 font-[family-name:var(--font-display)] font-bold text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.05] tracking-tight max-w-4xl">
+      {BUSINESS.tagline}
+    </h1>
+    <p class="mt-6 text-base md:text-xl text-white/85 max-w-2xl">
+      {BUSINESS.subtagline}
+    </p>
+
+    <div class="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+      <a
+        href="#menu"
+        class="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-dark)] text-white font-semibold transition-colors"
+      >
+        Esplora il Menu
+        <ArrowRight size={18} aria-hidden="true" />
+      </a>
+      <a
+        href={BUSINESS.phoneHref}
+        aria-label={`Chiama ${BUSINESS.name}`}
+        class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur text-white font-semibold border border-white/30 transition-colors"
+      >
+        <Phone size={18} aria-hidden="true" />
+        Ordina Subito
+      </a>
+    </div>
+  </div>
+</section>

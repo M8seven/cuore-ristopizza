@@ -1,0 +1,75 @@
+---
+import { Calendar, Beef, Fish } from '@lucide/astro';
+import { BUSINESS } from '../data/business';
+
+const events = [
+  {
+    day: 'Mercoledì',
+    icon: Beef,
+    title: 'Hamburger Day',
+    body:
+      'Panini artigianali dal cuore pugliese: WCS, Hazzard e il nostro Italiano con capocollo di Martina Franca.',
+    cta: { label: 'Prenota via WhatsApp', href: BUSINESS.whatsappHref, external: true },
+    accent: 'bg-amber-50 text-amber-900 border-amber-200',
+    iconBg: 'bg-amber-100 text-amber-700',
+  },
+  {
+    day: 'Giovedì',
+    icon: Fish,
+    title: 'Frittura di mare e calamari',
+    body:
+      'Una serata dedicata al mare: frittura croccante di pesce e calamari. Disponibile solo su prenotazione.',
+    cta: { label: 'Chiama per prenotare', href: BUSINESS.phoneHref, external: false },
+    accent: 'bg-sky-50 text-sky-900 border-sky-200',
+    iconBg: 'bg-sky-100 text-sky-700',
+  },
+];
+---
+
+<section class="py-16 md:py-24" id="eventi" aria-labelledby="events-title">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">
+          <Calendar size={14} class="inline align-[-2px] mr-1" aria-hidden="true" /> Eventi settimanali
+        </p>
+        <h2
+          id="events-title"
+          class="mt-3 font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl"
+        >
+          Appuntamenti che non puoi perdere.
+        </h2>
+      </div>
+      <p class="text-[var(--color-ink-soft)] max-w-md">
+        Ogni settimana portiamo in tavola qualcosa di diverso. Prenota il tavolo per essere sicuro del tuo posto.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-2">
+      {events.map((e) => (
+        <article
+          class={`relative overflow-hidden p-8 rounded-[var(--radius-card-lg)] border ${e.accent}`}
+        >
+          <div class="flex items-center gap-4">
+            <span class={`inline-flex items-center justify-center w-12 h-12 rounded-full ${e.iconBg}`}>
+              <e.icon size={22} aria-hidden="true" />
+            </span>
+            <div>
+              <p class="text-sm font-semibold uppercase tracking-wider opacity-75">{e.day}</p>
+              <h3 class="text-2xl font-bold">{e.title}</h3>
+            </div>
+          </div>
+          <p class="mt-5 leading-relaxed">{e.body}</p>
+          <a
+            href={e.cta.href}
+            target={e.cta.external ? '_blank' : undefined}
+            rel={e.cta.external ? 'noopener' : undefined}
+            class="mt-6 inline-flex items-center gap-2 h-11 px-5 rounded-full bg-[var(--color-ink)] text-white font-semibold hover:bg-black transition-colors"
+          >
+            {e.cta.label}
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

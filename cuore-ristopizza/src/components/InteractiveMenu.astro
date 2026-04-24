@@ -1,0 +1,251 @@
+---
+import { Heart, Flame, Sparkles, Info } from '@lucide/astro';
+import { pizzeClassiche, pizzeSpeciali, sfizi, extras } from '../data/menu';
+import type { MenuItem } from '../data/menu';
+
+const groups = [
+  { id: 'classiche', label: 'Classiche', items: pizzeClassiche },
+  { id: 'speciali', label: 'Speciali', items: pizzeSpeciali },
+] as const;
+
+const priceFmt = (value: number) =>
+  new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
+
+function badgeInfo(b: MenuItem['badge']) {
+  switch (b) {
+    case 'heart':
+      return { label: 'A forma di cuore', icon: Heart, cls: 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' };
+    case 'spicy':
+      return { label: 'Piccante', icon: Flame, cls: 'bg-red-100 text-red-700' };
+    case 'new':
+      return { label: 'Novità', icon: Sparkles, cls: 'bg-amber-100 text-amber-800' };
+    default:
+      return null;
+  }
+}
+---
+
+<section class="py-20 md:py-28 bg-white/60" id="menu" aria-labelledby="menu-title">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="max-w-3xl">
+      <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">Il Menu</p>
+      <h2
+        id="menu-title"
+        class="mt-3 font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl"
+      >
+        Pizze, sfizi e dolci.
+      </h2>
+      <p class="mt-5 text-lg text-[var(--color-ink-soft)] leading-relaxed">
+        Classiche della tradizione, speciali della casa e una selezione di sfizi per completare la serata.
+      </p>
+    </div>
+
+    <!-- Desktop: tabs -->
+    <div class="hidden md:block mt-12" data-tabs-root>
+      <div role="tablist" aria-label="Sezioni del menu" class="flex gap-1 p-1 bg-black/5 rounded-full w-fit">
+        {[...groups, { id: 'sfizi', label: 'Sfizi & Dolci' } as const].map((g, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${g.id}`}
+            aria-controls={`panel-${g.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            data-tab
+            class="h-10 px-5 rounded-full text-sm font-semibold text-[var(--color-ink-soft)] aria-selected:bg-white aria-selected:text-[var(--color-ink)] aria-selected:shadow-sm transition-colors"
+          >
+            {g.label}
+          </button>
+        ))}
+      </div>
+
+      {groups.map((g, i) => (
+        <div
+          id={`panel-${g.id}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${g.id}`}
+          hidden={i !== 0}
+          class="mt-8 grid gap-5 sm:grid-cols-2"
+        >
+          {g.items.map((item) => {
+            const bi = badgeInfo(item.badge);
+            return (
+              <article class="p-5 rounded-[var(--radius-card)] bg-white border border-black/5 shadow-sm shadow-black/5">
+                <header class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <h3 class="font-bold text-lg flex items-center gap-2">
+                      {item.name}
+                      {bi && (
+                        <span class={`inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs font-semibold ${bi.cls}`}>
+                          <bi.icon size={12} aria-hidden="true" />
+                          {bi.label}
+                        </span>
+                      )}
+                    </h3>
+                  </div>
+                  <data value={item.price} class="shrink-0 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-accent)]">
+                    {priceFmt(item.price)}
+                  </data>
+                </header>
+                <p class="mt-2 text-sm text-[var(--color-ink-soft)] leading-relaxed">{item.ingredients}</p>
+                {item.note && <p class="mt-2 text-xs text-[var(--color-ink-soft)] italic">{item.note}</p>}
+              </article>
+            );
+          })}
+        </div>
+      ))}
+
+      <!-- Panel sfizi -->
+      <div
+        id="panel-sfizi"
+        role="tabpanel"
+        aria-labelledby="tab-sfizi"
+        hidden
+        class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {sfizi.map((s) => (
+          <article class="p-6 rounded-[var(--radius-card)] bg-white border border-black/5 shadow-sm shadow-black/5">
+            <h3 class="font-bold text-xl">{s.title}</h3>
+            {s.description && (
+              <p class="mt-2 text-sm text-[var(--color-ink-soft)]">{s.description}</p>
+            )}
+            <ul class="mt-4 space-y-2">
+              {s.items.map((i) => (
+                <li class="text-[var(--color-ink)] flex gap-2">
+                  <span class="text-[var(--color-accent)] font-bold">·</span> {i}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- Mobile: accordion (native <details>, exclusive group via `name`) -->
+    <div class="md:hidden mt-10 space-y-3">
+      {groups.map((g, i) => (
+        <details
+          name="menu-acc"
+          class="group rounded-[var(--radius-card)] border border-black/5 bg-white shadow-sm shadow-black/5 overflow-hidden"
+          open={i === 0}
+        >
+          <summary class="list-none cursor-pointer p-5 flex items-center justify-between gap-3 font-[family-name:var(--font-display)] font-bold text-xl">
+            {g.label}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/5 text-[var(--color-ink-soft)] transition-transform group-open:rotate-45">
+              +
+            </span>
+          </summary>
+          <div class="px-5 pb-5 space-y-4">
+            {g.items.map((item) => {
+              const bi = badgeInfo(item.badge);
+              return (
+                <article class="border-t border-black/5 pt-4">
+                  <header class="flex items-start justify-between gap-3">
+                    <h3 class="font-semibold text-base flex flex-wrap items-center gap-2">
+                      {item.name}
+                      {bi && (
+                        <span class={`inline-flex items-center gap-1 h-5 px-1.5 rounded-full text-[10px] font-semibold ${bi.cls}`}>
+                          <bi.icon size={10} aria-hidden="true" />
+                          {bi.label}
+                        </span>
+                      )}
+                    </h3>
+                    <data value={item.price} class="shrink-0 font-semibold text-[var(--color-accent)]">
+                      {priceFmt(item.price)}
+                    </data>
+                  </header>
+                  <p class="mt-1 text-sm text-[var(--color-ink-soft)]">{item.ingredients}</p>
+                </article>
+              );
+            })}
+          </div>
+        </details>
+      ))}
+
+      <details name="menu-acc" class="group rounded-[var(--radius-card)] border border-black/5 bg-white shadow-sm shadow-black/5 overflow-hidden">
+        <summary class="list-none cursor-pointer p-5 flex items-center justify-between gap-3 font-[family-name:var(--font-display)] font-bold text-xl">
+          Sfizi & Dolci
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/5 text-[var(--color-ink-soft)] transition-transform group-open:rotate-45">
+            +
+          </span>
+        </summary>
+        <div class="px-5 pb-5 space-y-5">
+          {sfizi.map((s) => (
+            <div class="border-t border-black/5 pt-4">
+              <h3 class="font-semibold text-base">{s.title}</h3>
+              {s.description && <p class="text-xs text-[var(--color-ink-soft)] mt-1">{s.description}</p>}
+              <ul class="mt-2 space-y-1 text-sm">
+                {s.items.map((i) => (
+                  <li class="flex gap-2">
+                    <span class="text-[var(--color-accent)] font-bold">·</span> {i}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </details>
+    </div>
+
+    <!-- Info box: impasti speciali + mezzo metro -->
+    <div class="mt-14 p-6 md:p-8 rounded-[var(--radius-card-lg)] bg-[var(--color-ink)] text-white flex flex-col md:flex-row gap-6 md:items-center">
+      <div class="inline-flex shrink-0 items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white">
+        <Info size={22} aria-hidden="true" />
+      </div>
+      <div class="flex-1 grid gap-4 md:grid-cols-2">
+        <div>
+          <h3 class="font-semibold text-lg">Impasti speciali su richiesta</h3>
+          <p class="mt-1 text-sm text-white/75">
+            {extras.impasti.join(' · ')}. Chiedi al momento dell'ordine.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg">Formato famiglia</h3>
+          <p class="mt-1 text-sm text-white/75">
+            Disponibile anche nel formato <strong>{extras.formati[0]}</strong>, perfetto da condividere.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Tabs behavior (desktop only — mobile uses native <details>)
+  const root = document.querySelector('[data-tabs-root]');
+  if (root) {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>('[role="tabpanel"]')
+    );
+
+    function activate(idx: number) {
+      tabs.forEach((t, i) => {
+        const selected = i === idx;
+        t.setAttribute('aria-selected', String(selected));
+        t.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach((p, i) => {
+        if (i === idx) p.removeAttribute('hidden');
+        else p.setAttribute('hidden', '');
+      });
+    }
+
+    tabs.forEach((tab, idx) => {
+      tab.addEventListener('click', () => activate(idx));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          const next = (idx + 1) % tabs.length;
+          tabs[next]?.focus();
+          activate(next);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const prev = (idx - 1 + tabs.length) % tabs.length;
+          tabs[prev]?.focus();
+          activate(prev);
+        }
+      });
+    });
+  }
+</script>

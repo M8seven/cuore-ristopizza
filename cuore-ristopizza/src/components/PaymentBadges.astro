@@ -1,0 +1,22 @@
+---
+import { CreditCard, Smartphone, Contact, Banknote } from '@lucide/astro';
+
+const badges = [
+  { label: 'Mastercard', icon: CreditCard },
+  { label: 'VISA', icon: CreditCard },
+  { label: 'Bancomat', icon: Banknote },
+  { label: 'Contactless', icon: Contact },
+  { label: 'Satispay', icon: Smartphone },
+] as const;
+---
+
+<ul class="flex flex-wrap items-center gap-2" aria-label="Pagamenti accettati">
+  {badges.map((b) => (
+    <li
+      class="inline-flex items-center gap-1.5 h-8 px-3 rounded-full border border-black/10 bg-white/70 text-xs font-medium text-[var(--color-ink-soft)]"
+    >
+      <b.icon size={14} stroke-width={2} aria-hidden="true" />
+      {b.label}
+    </li>
+  ))}
+</ul>

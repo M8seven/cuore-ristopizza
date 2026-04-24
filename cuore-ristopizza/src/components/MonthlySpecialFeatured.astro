@@ -1,0 +1,76 @@
+---
+import { Sparkles, ArrowRight } from '@lucide/astro';
+import monthlySpecial from '../data/monthly-special.json';
+import { BUSINESS } from '../data/business';
+
+const { name, price, ingredients, description, available } = monthlySpecial;
+
+// Unsplash placeholder — swap with real photo pre-deploy
+const specialImage =
+  'https://images.unsplash.com/photo-1604917877934-07d8d248d396?auto=format&fit=crop&w=1600&q=80';
+
+const priceFormatted = new Intl.NumberFormat('it-IT', {
+  style: 'currency',
+  currency: 'EUR',
+}).format(price);
+---
+
+{available && (
+  <section class="py-16 md:py-24" id="pizza-del-mese" aria-labelledby="special-title">
+    <div class="max-w-6xl mx-auto px-5 md:px-8">
+      <article class="relative overflow-hidden rounded-[var(--radius-card-lg)] bg-[var(--color-ink)] text-white grid md:grid-cols-2">
+        <div class="relative aspect-[4/3] md:aspect-auto md:min-h-[420px]">
+          <img
+            src={specialImage}
+            alt={`Pizza ${name}: ${ingredients.join(', ')}`}
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
+
+        <div class="p-8 md:p-12 flex flex-col justify-center">
+          <span class="inline-flex items-center gap-1.5 self-start px-3 h-7 rounded-full bg-[var(--color-accent)] text-white text-xs font-semibold uppercase tracking-widest">
+            <Sparkles size={13} aria-hidden="true" />
+            Pizza del Mese
+          </span>
+
+          <h2
+            id="special-title"
+            class="mt-5 font-[family-name:var(--font-display)] font-bold text-4xl md:text-5xl"
+          >
+            {name}
+          </h2>
+
+          <p class="mt-4 text-white/80 text-base md:text-lg leading-relaxed">{description}</p>
+
+          <ul class="mt-5 flex flex-wrap gap-2" aria-label="Ingredienti">
+            {ingredients.map((ing) => (
+              <li class="inline-flex items-center h-7 px-3 rounded-full bg-white/10 text-sm">
+                {ing}
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-8 flex items-center justify-between gap-5">
+            <data
+              value={price}
+              class="font-[family-name:var(--font-display)] text-4xl md:text-5xl font-bold text-[var(--color-accent)]"
+            >
+              {priceFormatted}
+            </data>
+            <a
+              href={BUSINESS.whatsappHref}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white text-[var(--color-ink)] font-semibold hover:bg-white/90 transition-colors"
+            >
+              Ordina
+              <ArrowRight size={18} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+)}

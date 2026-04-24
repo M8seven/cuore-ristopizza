@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /privacy-policy
+Disallow: /cookie-policy
+
+Sitemap: https://cuoreristopizza.it/sitemap-index.xml
