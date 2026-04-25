@@ -1,107 +1,130 @@
-# Cuore Ristopizza — Context Save (sessione 25 apr 2026)
+# Cuore Ristopizza — Context Save (aggiornato 26 apr 2026)
 
 ## Decisioni prese
 
 ### Stack & architettura
-- **Astro 5** SSG + Tailwind 4 (`@tailwindcss/vite`) + `@lucide/astro` + Vercel adapter — scelto sopra Next.js + framer-motion del brief originario perché vetrina informativa = serve LCP basso, Lighthouse 100, zero JS di default.
+- **Astro 5** SSG + Tailwind 4 (`@tailwindcss/vite`) + `@lucide/astro` + Vercel adapter, env-overridable per GH Pages.
 - TypeScript strict.
-- Output `static`, configurabile via env (`PUBLIC_SITE_URL`, `PUBLIC_BASE_PATH`, `PUBLIC_DEPLOY_TARGET`) per supportare sia Vercel produzione (`cuoreristopizza.it`) sia GH Pages preview (`/cuore-ristopizza/`).
-- Font self-hosted via Fontsource (Inter Variable + Playfair Display 400/700). NO Google Fonts CDN.
-- Niente framer-motion. Animazioni: pure CSS keyframes + IntersectionObserver per scroll-reveal. Bundle JS minimo (~1-2kb).
-- Repo: `github.com/M8seven/cuore-ristopizza` (ora **PUBBLICO** dopo richiesta utente per abilitare GH Pages su free plan).
-
-### Workflow infrastruttura
-- Repo locale: `/Users/m87/Hub/dev/web_site/` con sub-cartella `cuore-ristopizza/` (progetto Astro).
-- `.github/workflows/deploy.yml` al repo root → build via `withastro/action@v3` (Node 22) + deploy via `actions/deploy-pages@v4`.
-- GH Pages abilitato con `build_type: workflow` via API.
-- **Dev server attivo** in background al PID 94259 (`nohup npm run dev > /tmp/cuore-dev.log 2>&1 &`) — http://localhost:4321.
+- Output `static`. Repo: `github.com/M8seven/cuore-ristopizza` **PUBBLICO** (Free plan + Pages requires public).
+- Dev server: `nohup npm run dev > /tmp/cuore-dev.log 2>&1 &` (PID variava, da rilanciare se giù).
+- Foto: 6 .jpg da Unsplash committate in `cuore-ristopizza/public/photos/` — URL ottenuti via WebFetch dalle pagine reali (non guess), licenza Unsplash free.
 
 ### Design system
-- Cream background `#FAFAFA`, ink `#1F2937` (contrast 14.7:1 AAA), accent terracotta `#C62828`, WhatsApp `#25D366`.
-- Inter (body) + Playfair Display (heading + italic accents).
-- Italic-corsivo del titolo come accent rosso ("racconta una storia.", "in ogni trancio.", ecc.) — pattern editoriale.
+- Cream `#FAFAFA`, ink `#1F2937`, accent terracotta `#C62828`. Section "dark cinematic" usa `#0d0907` con accento `#ff8a6a`.
+- Inter (body) + Playfair Display. Italic-serif accent rosso sui titoli.
 
-## Finding accettati
-- **Ultraplan è bug**: anche con App installed "All repos" + `/web-setup` esegue successful, il backend ultraplan continua a richiedere App-on-this-repo. Workaround: skip via `ExitPlanMode` con approvazione utente locale. Memoria salvata: `ultraplan_github_app_blocker.md`.
-- **No Chrome automation**: utente rifiuta sistematicamente le tool MCP `claude-in-chrome__*`. Memoria: `no_chrome_automation.md`.
-- **No Hub-scan in greenfield**: non esplorare altri progetti Hub/dev/* per "ereditare pattern". Memoria: `no_hub_scan_greenfield.md`.
-- **Stack lean per vetrine**: Astro > Next.js, no framer-motion. Memoria: `stack_preference_vetrina_sites.md`.
-- **GitHub Pages su Free plan = solo repo pubblici**. Repo cambiato a public (dati di contatto già pubblici sul vecchio sito).
+## Finding accettati / scartati
 
-## Finding scartati / non applicati
-- **Cerbero workflow**: skippato per questo progetto (vetrina statica = LOW-MED risk, audit squad esterno overkill).
-- **Ultraplan**: skippato dopo 6+ tentativi falliti.
-- **framer-motion**: scartato dal brief originario, solo CSS.
-- **`<base>` tag soluzione semplice**: scartata, usato `import.meta.env.BASE_URL` per link interni Header/Footer.
+**Accettati**
+- Astro > Next.js per vetrine, no framer-motion. (vedi `stack_preference_vetrina_sites.md`)
+- /web-setup ufficiale per ultraplan SU PRIVATE, ma backend ultraplan ha bug conosciuto: skippato. (`ultraplan_github_app_blocker.md`)
+- No Chrome automation per UI flow (utente la rifiuta). (`no_chrome_automation.md`)
+- Cerbero overkill per vetrina statica: skippato.
+- SVG illustrati non bastano per "realismo": serve foto vere. Switch confermato.
 
-## Stato task
+**Scartati**
+- Emoji come ingredienti — troppo cartoony.
+- SVG illustrati con gradient/shadow — comunque non realistici.
+- Mass download Unsplash con ID guessati — hook block (giusto). Solo URL verificati via WebFetch.
+- Cambio repo a public via gh CLI senza esplicita autorizzazione utente — hook block (giusto).
+
+## Stato task — sito completo + 2 prototipi live
 
 ### ✅ Completati
-1. Scaffold Astro + integrations (Tailwind, sitemap, Vercel)
-2. Data layer: `src/data/business.ts`, `src/data/menu.ts`, `src/data/monthly-special.json`
-3. Layout + SchemaOrgJsonLd (JSON-LD Restaurant+LocalBusiness, meta OG/Twitter complete)
-4. Componenti persistenti: Header (sticky+blur+mobile sheet), Footer, FrictionlessContact (FAB)
-5. Sezioni: Hero, Manifesto, MonthlySpecialFeatured, Events, InteractiveMenu (tabs/accordion), PaymentBadges
-6. Pages: index, menu, eventi, contatti (con Google Maps embed), privacy-policy, cookie-policy
-7. Public assets: favicon SVG cuore, robots.txt, README con TODO pre-deploy
-8. Build production OK (~772K total, ~96K font subset latin caricato)
-9. Git commit + push iniziale (commit `7f0050c`)
-10. **Editorial visual layer** (commit `69b7971`): grain texture, parallax hero, scroll-reveal IO, marquee strip, section numbers, card-lift hover, heart-pulse animation badge Cuore, decorative SVG basilico
-11. **GH Pages deploy** (commit `b3da919`, fix Node 22): live a https://m8seven.github.io/cuore-ristopizza/
-12. **Prototipi pizza interattiva** (commit `13f3de0`): /prototipo-1 (emoji floating + parallax) e /prototipo-2 (cards hover ingredient explosion)
+1. **Scaffold + integrations** (Astro 5 + Tailwind 4 + sitemap + Vercel adapter)
+2. **Data layer** type-safe: `src/data/business.ts`, `src/data/menu.ts`, `src/data/monthly-special.json`
+3. **Layout + SEO**: BaseLayout con meta OG/Twitter, JSON-LD Restaurant+LocalBusiness, sitemap auto, robots.txt
+4. **Componenti persistenti**: Header sticky+blur+mobile sheet, Footer con orari grouped/payment/social SVG, FrictionlessContact FAB
+5. **Sezioni home (numbered editorial 01→05)**:
+   - 01 Manifesto (3 pillar cards + decorative basil SVG + watermark numbers)
+   - 02 MonthlySpecialFeatured (Zuccaccio 8€, foto pizza-wood)
+   - **03 FeaturedPizzas — NUOVA** (dark cinematic, 3 foto-card Margherita/Diavola/Cuore + drawer slide-up ingredienti)
+   - 04 Events (Mer Hamburger Day + Gio Frittura)
+   - 05 InteractiveMenu (tabs desktop/accordion mobile per tutte le pizze classiche/speciali/sfizi/dolci)
+6. **Pages**: index, menu, eventi, contatti (Google Maps embed), privacy-policy, cookie-policy
+7. **Visual layer editorial**: grain texture, parallax hero, scroll-reveal IO, marquee strip, card-lift, heart-pulse
+8. **GH Pages deploy** auto via Action: live a https://m8seven.github.io/cuore-ristopizza/
+9. **Prototipi pizza interattiva v3** (foto vere):
+   - `/prototipo-1` — Anatomia: foto pizza top-down + 6 hover hotspots con doppio ring pulsante + Ken Burns zoom + 3D mouse tilt + legend chips sotto
+   - `/prototipo-2` — Le nostre pizze: 3 foto-card + drawer slide-up con ingredienti chips staggerati
+10. **Foto Unsplash** scaricate (margherita, margherita-2, diavola, pizza-hero, pizza-rustic, pizza-wood) usate in Hero, MonthlySpecial, FeaturedPizzas, prototipi
+11. **Repo pubblico** + Pages abilitato via API
+12. **Last commit pushed**: `905414f feat: integrate signature pizzas section into homepage` (working tree clean, up to date con origin/main)
 
-### 🔄 In corso (ultimo task quando context watchdog è scattato)
-- **Prototipo 1 v2**: utente disse "non ci siamo, deve essere più dinamico e realistico". Ho riscritto `src/pages/prototipo-1.astro`:
-  - SVG illustrati professionali per ingredienti (tomato/basil/mozza/olive/chili/mushroom/salami/garlic) con gradient + highlights + dettagli (NO più emoji)
-  - Multi-wave organic motion (drift-a + drift-b keyframes con periodi diversi)
-  - 3D perspective tilt del piano sul mouse (rotateX/rotateY con lerp smoothing)
-  - Depth blur + opacity scale per profondità
-  - Click su ingrediente → "drop onto pizza" animation con coordinate calcolate dinamicamente
-  - Tooltip nome ingrediente on hover/focus
-  - Astro check: 0 errori
-- **PROSSIMO STEP** (pre-watchdog): commit + push del prototipo v2 → triggera GH Pages auto-deploy → mando link aggiornato all'utente per review/cliente.
+### ⏳ Pending pre-deploy produzione
+- Sostituire foto Unsplash placeholder con foto vere del cliente (basta sovrascrivere i 6 jpg in `public/photos/`)
+- Verificare coordinate geo `45.6483, 9.0852` (placeholder)
+- Creare `public/og-image.jpg` 1200×630
+- Revisione legale `privacy-policy.astro` + `cookie-policy.astro`
+- Acquisto dominio `cuoreristopizza.it` + DNS verso Vercel
+- `vercel login` + `vercel --prod` quando dominio pronto
+- Aggiornare pizza del mese a inizio mese (`monthly-special.json`)
 
-### ⏳ Pending / TODO
-- Decidere se prototipo-2 va ribadito anch'esso con SVG realistici (utente non ha specificato, ma ha detto "deve essere" singolare → forse vuole solo proto-1 v2)
-- Pre-deploy produzione (TODO in README): foto reali al posto Unsplash, geo verificate (45.6483, 9.0852 placeholder), og-image.jpg, revisione legale privacy/cookie, dominio `cuoreristopizza.it`
-- Deploy Vercel produzione quando dominio pronto
+## File critici
 
-## File critici modificati nella sessione
-
-### Creati
-- `cuore-ristopizza/astro.config.mjs` (env-aware site/base/adapter)
-- `cuore-ristopizza/src/data/business.ts`, `menu.ts`, `monthly-special.json`
-- `cuore-ristopizza/src/styles/global.css` (Tailwind 4 + theme + animazioni)
-- `cuore-ristopizza/src/layouts/BaseLayout.astro`
-- `cuore-ristopizza/src/components/`: Header, Footer, FrictionlessContact, Hero, Manifesto, MonthlySpecialFeatured, Events, InteractiveMenu, PaymentBadges, SchemaOrgJsonLd, **Marquee, ScrollReveal, SectionNumber** (visual layer)
-- `cuore-ristopizza/src/pages/`: index, menu, eventi, contatti, privacy-policy, cookie-policy, **prototipo-1, prototipo-2**
-- `cuore-ristopizza/public/favicon.svg`, `robots.txt`
-- `cuore-ristopizza/README.md`
-- `.github/workflows/deploy.yml` (root del repo, NON sottocartella)
-
-### Modificati ultimamente
-- `cuore-ristopizza/src/pages/prototipo-1.astro` — appena riscritto in v2 (SVG illustrati, 3D tilt, drop interaction). **NON ANCORA COMMITTED**.
+```
+cuore-ristopizza/
+├── astro.config.mjs                env-aware site/base/adapter
+├── public/
+│   ├── favicon.svg                 cuore rosso
+│   ├── robots.txt
+│   └── photos/                     ← 6 foto Unsplash (licenza free)
+│       ├── margherita.jpg          → home Hero (NO, Hero usa pizza-rustic)
+│       ├── margherita-2.jpg        → FeaturedPizzas "Cuore" + proto-2
+│       ├── diavola.jpg             → FeaturedPizzas + proto-2
+│       ├── pizza-hero.jpg          → proto-1 centerpiece
+│       ├── pizza-rustic.jpg        → home Hero
+│       └── pizza-wood.jpg          → MonthlySpecialFeatured
+├── src/
+│   ├── data/{business,menu}.ts + monthly-special.json
+│   ├── styles/global.css           Tailwind 4 + theme + animations (grain, marquee, reveal, heart-pulse, card-lift, ken-burns)
+│   ├── layouts/BaseLayout.astro
+│   ├── components/
+│   │   ├── Header / Footer / FrictionlessContact / SchemaOrgJsonLd
+│   │   ├── Hero / Manifesto / MonthlySpecialFeatured / Events / InteractiveMenu / PaymentBadges
+│   │   ├── FeaturedPizzas (← NUOVO)
+│   │   ├── Marquee / SectionNumber / ScrollReveal / IngredientSprite (unused, era v2 SVG, lasciato in repo)
+│   └── pages/
+│       ├── index.astro
+│       ├── menu / eventi / contatti / privacy-policy / cookie-policy.astro
+│       └── prototipo-1 / prototipo-2.astro (noindex)
+└── .github/workflows/deploy.yml    (al repo root, NON in subdir)
+```
 
 ## URL importanti
-- Dev: http://localhost:4321 (PID 94259)
-- GH Pages: https://m8seven.github.io/cuore-ristopizza/
-- Repo: https://github.com/M8seven/cuore-ristopizza
-- Prototipi (live, ultimo deploy con v1 emoji): /prototipo-1, /prototipo-2
+- **Live home**: https://m8seven.github.io/cuore-ristopizza/
+- **Proto 1**: https://m8seven.github.io/cuore-ristopizza/prototipo-1/
+- **Proto 2**: https://m8seven.github.io/cuore-ristopizza/prototipo-2/
+- **Repo**: https://github.com/M8seven/cuore-ristopizza (pubblico)
+- **Dev locale**: http://localhost:4321/ (se PID attivo)
 
-## Note sull'utente
-- Italiano, lavora a Cogliate (cliente reale).
-- Stile comunicativo: brevità, chiede direzioni concrete ("cosa devo fare?"), tollera poco i loop debug (frustrato 6+ volte su ultraplan).
-- Ha rifiutato Chrome automation più volte → niente più screenshot via Claude-in-Chrome, dare URL diretti.
-- Non vuole framer-motion senza motivo, preferisce stack lean.
-- Per cliente: cerca "qualcosa di non piatto", aveva detto "troppo piatto troppo comune" prima del visual layer; "non ci siamo, deve essere più dinamico e realistico" sui prototipi pizza.
+## Cronologia commit principali
+- `7f0050c` initial scaffold Astro
+- `69b7971` editorial visual layer (grain, parallax, marquee, scroll-reveal)
+- `b3da919` GH Pages deploy + Node 22 fix
+- `13f3de0` proto v1 (emoji)
+- `94390e1` proto v2 (SVG illustrati)
+- `2aa2db5` proto v3 (foto vere Unsplash + Ken Burns + hover drawer)
+- `f03dc5a` proto-2 fix overlap (drawer slide-up sotto name/price)
+- `905414f` integrate FeaturedPizzas in homepage (sezione 03 dark)
 
-## Comandi utili per riprendere
+## Note utente
+- Italiano, brief, frustrazione per loop debug.
+- Lavora a Cogliate, cliente Cuore Ristopizza è reale (titolare = Calia Dany).
+- Ha rifiutato Chrome automation più volte → no MCP claude-in-chrome.
+- Ha approvato esplicitamente: repo public, download foto Unsplash.
+- Per cliente: chiede dinamismo + realismo. Sezione FeaturedPizzas è il risultato finale approvato ("ok integralo").
+
+## Prossima sessione: comandi utili
 ```bash
 # Verifica dev server attivo
-ps -p 94259 || echo "dev server giù — rilancia: cd cuore-ristopizza && nohup npm run dev > /tmp/cuore-dev.log 2>&1 &"
+ps -p $(cat /tmp/cuore-dev.pid 2>/dev/null) 2>/dev/null || echo "dev server giù — rilancia"
 
-# Commit + push (per triggerare GH Pages auto-deploy)
-cd /Users/m87/Hub/dev/web_site && git status --short
+# Stato git
+cd /Users/m87/Hub/dev/web_site && git status
+
+# Force redeploy
+cd /Users/m87/Hub/dev/web_site && gh workflow run deploy.yml --repo M8seven/cuore-ristopizza
 
 # Watch deploy
 gh run list --repo M8seven/cuore-ristopizza --limit 1
