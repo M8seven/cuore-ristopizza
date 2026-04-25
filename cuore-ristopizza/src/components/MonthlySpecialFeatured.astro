@@ -2,6 +2,7 @@
 import { Sparkles, ArrowRight } from '@lucide/astro';
 import monthlySpecial from '../data/monthly-special.json';
 import { BUSINESS } from '../data/business';
+import SectionNumber from './SectionNumber.astro';
 
 const { name, price, ingredients, description, available } = monthlySpecial;
 
@@ -16,28 +17,46 @@ const priceFormatted = new Intl.NumberFormat('it-IT', {
 ---
 
 {available && (
-  <section class="py-16 md:py-24" id="pizza-del-mese" aria-labelledby="special-title">
+  <section
+    id="pizza-del-mese"
+    class="relative py-16 md:py-24 scroll-mt-20"
+    aria-labelledby="special-title"
+  >
     <div class="max-w-6xl mx-auto px-5 md:px-8">
-      <article class="relative overflow-hidden rounded-[var(--radius-card-lg)] bg-[var(--color-ink)] text-white grid md:grid-cols-2">
-        <div class="relative aspect-[4/3] md:aspect-auto md:min-h-[420px]">
+      <div class="reveal mb-10">
+        <SectionNumber num="02" label="Pizza del mese" />
+      </div>
+
+      <article class="reveal card-lift relative overflow-hidden rounded-[var(--radius-card-lg)] bg-[var(--color-ink)] text-white grid md:grid-cols-2 shadow-2xl shadow-black/20">
+        <!-- Big watermark name behind image side -->
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute top-4 left-4 md:top-6 md:left-6 font-[family-name:var(--font-display)] italic text-white/8 text-7xl md:text-9xl leading-none select-none z-10"
+        >
+          {name.toLowerCase()}
+        </span>
+
+        <div class="relative aspect-[4/3] md:aspect-auto md:min-h-[460px] overflow-hidden">
           <img
             src={specialImage}
             alt={`Pizza ${name}: ${ingredients.join(', ')}`}
             loading="lazy"
             decoding="async"
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-cover scale-[1.02] transition-transform duration-700 group-hover:scale-105"
           />
+          <!-- Gradient cut between image and text panel -->
+          <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--color-ink)] to-transparent hidden md:block"></div>
         </div>
 
-        <div class="p-8 md:p-12 flex flex-col justify-center">
-          <span class="inline-flex items-center gap-1.5 self-start px-3 h-7 rounded-full bg-[var(--color-accent)] text-white text-xs font-semibold uppercase tracking-widest">
+        <div class="relative p-8 md:p-12 flex flex-col justify-center z-20">
+          <span class="inline-flex items-center gap-1.5 self-start px-3 h-7 rounded-full bg-[var(--color-accent)] text-white text-xs font-semibold uppercase tracking-widest shadow-lg shadow-[var(--color-accent)]/30">
             <Sparkles size={13} aria-hidden="true" />
             Pizza del Mese
           </span>
 
           <h2
             id="special-title"
-            class="mt-5 font-[family-name:var(--font-display)] font-bold text-4xl md:text-5xl"
+            class="mt-5 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl"
           >
             {name}
           </h2>
@@ -46,7 +65,7 @@ const priceFormatted = new Intl.NumberFormat('it-IT', {
 
           <ul class="mt-5 flex flex-wrap gap-2" aria-label="Ingredienti">
             {ingredients.map((ing) => (
-              <li class="inline-flex items-center h-7 px-3 rounded-full bg-white/10 text-sm">
+              <li class="inline-flex items-center h-7 px-3 rounded-full bg-white/10 text-sm border border-white/10">
                 {ing}
               </li>
             ))}
@@ -55,7 +74,7 @@ const priceFormatted = new Intl.NumberFormat('it-IT', {
           <div class="mt-8 flex items-center justify-between gap-5">
             <data
               value={price}
-              class="font-[family-name:var(--font-display)] text-4xl md:text-5xl font-bold text-[var(--color-accent)]"
+              class="font-[family-name:var(--font-display)] text-5xl md:text-6xl font-bold text-[var(--color-accent)]"
             >
               {priceFormatted}
             </data>
@@ -63,10 +82,10 @@ const priceFormatted = new Intl.NumberFormat('it-IT', {
               href={BUSINESS.whatsappHref}
               target="_blank"
               rel="noopener"
-              class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white text-[var(--color-ink)] font-semibold hover:bg-white/90 transition-colors"
+              class="group inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white text-[var(--color-ink)] font-semibold hover:bg-white/90 transition-all hover:gap-3"
             >
               Ordina
-              <ArrowRight size={18} aria-hidden="true" />
+              <ArrowRight size={18} aria-hidden="true" class="transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
         </div>

@@ -1,0 +1,25 @@
+---
+// Component-less script: enables .reveal-in trigger via IntersectionObserver
+// for any element with the .reveal class. Self-contained, ~20 lines.
+---
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>('.reveal');
+  if (els.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-in');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+    );
+    els.forEach((el) => io.observe(el));
+  } else {
+    // Fallback: no IO support, show everything
+    els.forEach((el) => el.classList.add('reveal-in'));
+  }
+</script>

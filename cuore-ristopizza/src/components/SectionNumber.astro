@@ -1,0 +1,20 @@
+---
+interface Props {
+  /** Section ordinal — "01", "02", ... */
+  num: string;
+  /** Eyebrow label rendered next to the number */
+  label: string;
+  /** Optional id for jump anchors */
+  id?: string;
+  /** Tone — light bg vs dark bg */
+  tone?: 'light' | 'dark';
+}
+
+const { num, label, id, tone = 'light' } = Astro.props;
+const labelColor = tone === 'dark' ? 'text-white/70' : 'text-[var(--color-ink-soft)]';
+---
+
+<header class="flex items-baseline gap-5 mb-5" {...(id ? { id } : {})}>
+  <span class="editorial-num" aria-hidden="true">{num}</span>
+  <p class={`text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase ${labelColor}`}>{label}</p>
+</header>

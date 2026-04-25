@@ -1,0 +1,42 @@
+---
+interface Props {
+  items?: string[];
+  /** Color theme: "ink" = dark band, "accent" = red band, "cream" = light band */
+  tone?: 'ink' | 'accent' | 'cream';
+}
+
+const {
+  items = [
+    'Passione',
+    'Artigianato',
+    'Digeribilità',
+    'Accoglienza',
+    'Tradizione',
+    'Lievitazioni lunghe',
+    'Ingredienti del territorio',
+    'Pet-friendly',
+  ],
+  tone = 'ink',
+} = Astro.props;
+
+// Duplicate the list so the marquee scrolls seamlessly with translateX(-50%)
+const loop = [...items, ...items];
+
+const themes = {
+  ink: 'bg-[var(--color-ink)] text-white',
+  accent: 'bg-[var(--color-accent)] text-white',
+  cream: 'bg-[var(--color-cream-warm)] text-[var(--color-ink)] border-y border-black/5',
+};
+const theme = themes[tone];
+---
+
+<div class={`marquee overflow-hidden py-5 md:py-7 ${theme}`} aria-hidden="true">
+  <div class="marquee-track">
+    {loop.map((it) => (
+      <span class="flex items-center font-[family-name:var(--font-display)] text-2xl md:text-4xl font-bold whitespace-nowrap">
+        <span class="px-7 md:px-10">{it}</span>
+        <span class="opacity-50 select-none">✦</span>
+      </span>
+    ))}
+  </div>
+</div>

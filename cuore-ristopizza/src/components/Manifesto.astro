@@ -1,5 +1,6 @@
 ---
 import { Wheat, Heart, PawPrint } from '@lucide/astro';
+import SectionNumber from './SectionNumber.astro';
 
 const pillars = [
   {
@@ -23,31 +24,62 @@ const pillars = [
 ];
 ---
 
-<section class="py-20 md:py-28" id="manifesto" aria-labelledby="manifesto-title">
+<section
+  id="manifesto"
+  class="relative py-20 md:py-32 scroll-mt-20"
+  aria-labelledby="manifesto-title"
+>
+  <!-- Decorative SVG: basil leaves -->
+  <svg
+    class="deco-pin -top-6 right-6 md:right-12 w-24 md:w-36 rotate-[18deg] hidden sm:block"
+    viewBox="0 0 120 120"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M20 80 C 40 30, 80 20, 110 30 C 95 60, 60 95, 25 100 Z"
+      fill="currentColor"
+      opacity="0.08"
+    />
+    <path
+      d="M20 80 C 40 30, 80 20, 110 30"
+      stroke="currentColor"
+      stroke-width="1.5"
+      opacity="0.4"
+    />
+    <path d="M55 60 L 85 38" stroke="currentColor" stroke-width="1" opacity="0.35" />
+    <path d="M40 75 L 65 50" stroke="currentColor" stroke-width="1" opacity="0.35" />
+  </svg>
+
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <div class="max-w-3xl">
-      <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">
-        Il nostro manifesto
-      </p>
+    <div class="reveal max-w-3xl">
+      <SectionNumber num="01" label="Il nostro manifesto" />
       <h2
         id="manifesto-title"
-        class="mt-3 font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl"
+        class="font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl lg:text-6xl"
       >
-        La nostra pizza racconta una storia.
+        La nostra pizza<br />
+        <span class="italic font-normal text-[var(--color-accent)]">racconta una storia.</span>
       </h2>
-      <p class="mt-5 text-lg text-[var(--color-ink-soft)] leading-relaxed">
+      <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed">
         Da Cogliate, con ingredienti che attraversano l'Italia. Ogni trancio è il risultato di
         scelte attente, fatte per chi vuole mangiare bene senza complicazioni.
       </p>
     </div>
 
-    <div class="mt-14 grid gap-6 md:grid-cols-3">
-      {pillars.map((p) => (
-        <article class="p-7 rounded-[var(--radius-card-lg)] bg-white shadow-sm shadow-black/5 border border-black/5">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+    <div class="mt-14 grid gap-6 md:grid-cols-3" data-reveal-stagger>
+      {pillars.map((p, i) => (
+        <article class="reveal card-lift relative p-7 md:p-8 rounded-[var(--radius-card-lg)] bg-white shadow-sm shadow-black/5 border border-black/5">
+          <span
+            aria-hidden="true"
+            class="absolute top-5 right-6 font-[family-name:var(--font-display)] text-5xl font-bold text-[var(--color-accent)]/10 leading-none select-none"
+          >
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
             <p.icon size={22} aria-hidden="true" />
           </div>
-          <h3 class="mt-5 text-xl font-bold">{p.title}</h3>
+          <h3 class="mt-5 text-xl font-bold pr-10">{p.title}</h3>
           <p class="mt-3 text-[var(--color-ink-soft)] leading-relaxed">{p.body}</p>
         </article>
       ))}

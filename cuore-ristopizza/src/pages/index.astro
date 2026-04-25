@@ -5,12 +5,18 @@ import Manifesto from '../components/Manifesto.astro';
 import MonthlySpecialFeatured from '../components/MonthlySpecialFeatured.astro';
 import Events from '../components/Events.astro';
 import InteractiveMenu from '../components/InteractiveMenu.astro';
+import Marquee from '../components/Marquee.astro';
 ---
 
 <BaseLayout>
   <Hero />
   <Manifesto />
+  <Marquee tone="ink" />
   <MonthlySpecialFeatured />
   <Events />
+  <Marquee
+    tone="cream"
+    items={['Margherita 5€', 'Diavola 7€', 'Cuore ❤', 'Brigante 8€', 'Zuccaccio del mese', 'Mezzo Metro disponibile', 'Hamburger Day Mer', 'Frittura Gio']}
+  />
   <InteractiveMenu />
 </BaseLayout>

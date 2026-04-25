@@ -2,6 +2,7 @@
 import { Heart, Flame, Sparkles, Info } from '@lucide/astro';
 import { pizzeClassiche, pizzeSpeciali, sfizi, extras } from '../data/menu';
 import type { MenuItem } from '../data/menu';
+import SectionNumber from './SectionNumber.astro';
 
 const groups = [
   { id: 'classiche', label: 'Classiche', items: pizzeClassiche },
@@ -14,26 +15,32 @@ const priceFmt = (value: number) =>
 function badgeInfo(b: MenuItem['badge']) {
   switch (b) {
     case 'heart':
-      return { label: 'A forma di cuore', icon: Heart, cls: 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' };
+      return {
+        label: 'A forma di cuore',
+        icon: Heart,
+        cls: 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]',
+        animate: 'heart-pulse',
+      };
     case 'spicy':
-      return { label: 'Piccante', icon: Flame, cls: 'bg-red-100 text-red-700' };
+      return { label: 'Piccante', icon: Flame, cls: 'bg-red-100 text-red-700', animate: '' };
     case 'new':
-      return { label: 'Novità', icon: Sparkles, cls: 'bg-amber-100 text-amber-800' };
+      return { label: 'Novità', icon: Sparkles, cls: 'bg-amber-100 text-amber-800', animate: '' };
     default:
       return null;
   }
 }
 ---
 
-<section class="py-20 md:py-28 bg-white/60" id="menu" aria-labelledby="menu-title">
+<section class="relative py-20 md:py-32 scroll-mt-20" id="menu" aria-labelledby="menu-title">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <div class="max-w-3xl">
-      <p class="text-sm font-semibold tracking-widest uppercase text-[var(--color-accent)]">Il Menu</p>
+    <div class="reveal max-w-3xl">
+      <SectionNumber num="04" label="Il Menu" />
       <h2
         id="menu-title"
-        class="mt-3 font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl"
+        class="font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl lg:text-6xl"
       >
-        Pizze, sfizi e dolci.
+        Pizze, sfizi<br />
+        <span class="italic font-normal text-[var(--color-accent)]">e dolci.</span>
       </h2>
       <p class="mt-5 text-lg text-[var(--color-ink-soft)] leading-relaxed">
         Classiche della tradizione, speciali della casa e una selezione di sfizi per completare la serata.
@@ -70,14 +77,14 @@ function badgeInfo(b: MenuItem['badge']) {
           {g.items.map((item) => {
             const bi = badgeInfo(item.badge);
             return (
-              <article class="p-5 rounded-[var(--radius-card)] bg-white border border-black/5 shadow-sm shadow-black/5">
+              <article class="card-lift p-5 rounded-[var(--radius-card)] bg-white border border-black/5 shadow-sm shadow-black/5">
                 <header class="flex items-start justify-between gap-3">
                   <div class="min-w-0">
                     <h3 class="font-bold text-lg flex items-center gap-2">
                       {item.name}
                       {bi && (
                         <span class={`inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs font-semibold ${bi.cls}`}>
-                          <bi.icon size={12} aria-hidden="true" />
+                          <bi.icon size={12} aria-hidden="true" class={bi.animate} />
                           {bi.label}
                         </span>
                       )}
@@ -145,7 +152,7 @@ function badgeInfo(b: MenuItem['badge']) {
                       {item.name}
                       {bi && (
                         <span class={`inline-flex items-center gap-1 h-5 px-1.5 rounded-full text-[10px] font-semibold ${bi.cls}`}>
-                          <bi.icon size={10} aria-hidden="true" />
+                          <bi.icon size={10} aria-hidden="true" class={bi.animate} />
                           {bi.label}
                         </span>
                       )}

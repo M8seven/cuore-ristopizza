@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, Phone } from '@lucide/astro';
+import { ArrowRight, Phone, ChevronDown } from '@lucide/astro';
 import { BUSINESS } from '../data/business';
 
 // Unsplash placeholder — swap with real photo pre-deploy
@@ -7,46 +7,65 @@ const heroImage =
   'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80';
 ---
 
-<section class="relative overflow-hidden" aria-label="Hero">
-  <div class="absolute inset-0 -z-10">
-    <img
-      src={heroImage}
-      alt=""
-      aria-hidden="true"
-      fetchpriority="high"
-      decoding="async"
-      class="w-full h-full object-cover"
-    />
-    <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/65"></div>
-  </div>
+<section class="relative overflow-hidden min-h-[88vh] md:min-h-[92vh] flex items-center" aria-label="Hero">
+  <!-- Parallax bg layer (CSS background-attachment fixed on desktop) -->
+  <div
+    class="absolute inset-0 -z-10 hero-parallax"
+    style={`background-image: url('${heroImage}');`}
+  ></div>
+  <!-- Vignette + warm gradient overlay for text legibility + cinematic feel -->
+  <div
+    class="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 via-black/35 to-black/75"
+  ></div>
+  <div
+    class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(0,0,0,0.55)_100%)]"
+  ></div>
 
-  <div class="relative max-w-5xl mx-auto px-5 md:px-8 py-28 md:py-36 lg:py-44 text-white">
-    <p class="font-[family-name:var(--font-display)] text-sm md:text-base tracking-[0.3em] uppercase opacity-80">
+  <!-- Decorative serif quote mark (top-left flourish) -->
+  <span
+    class="deco-pin top-12 left-6 md:top-16 md:left-12 select-none text-white/10"
+    aria-hidden="true"
+    style="font-family: var(--font-display); font-size: clamp(8rem, 18vw, 16rem); line-height: 0.7;"
+  >“</span>
+
+  <div class="relative w-full max-w-5xl mx-auto px-5 md:px-8 py-24 md:py-28 lg:py-32 text-white">
+    <p class="reveal font-[family-name:var(--font-display)] text-sm md:text-base tracking-[0.3em] uppercase opacity-90 italic">
       {BUSINESS.name} · Cogliate
     </p>
-    <h1 class="mt-6 font-[family-name:var(--font-display)] font-bold text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.05] tracking-tight max-w-4xl">
-      {BUSINESS.tagline}
+    <h1 class="reveal mt-6 font-[family-name:var(--font-display)] font-bold text-[clamp(2.5rem,7vw,5.25rem)] leading-[1.02] tracking-tight max-w-4xl">
+      Passione e Amore<br />
+      <span class="italic font-normal">in ogni</span> trancio.
     </h1>
-    <p class="mt-6 text-base md:text-xl text-white/85 max-w-2xl">
+    <p class="reveal mt-6 text-base md:text-xl text-white/85 max-w-2xl">
       {BUSINESS.subtagline}
     </p>
 
-    <div class="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+    <div class="reveal mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
       <a
         href="#menu"
-        class="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-dark)] text-white font-semibold transition-colors"
+        class="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-dark)] text-white font-semibold transition-all hover:gap-3 shadow-lg shadow-black/30"
       >
         Esplora il Menu
-        <ArrowRight size={18} aria-hidden="true" />
+        <ArrowRight size={18} aria-hidden="true" class="transition-transform group-hover:translate-x-0.5" />
       </a>
       <a
         href={BUSINESS.phoneHref}
         aria-label={`Chiama ${BUSINESS.name}`}
-        class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur text-white font-semibold border border-white/30 transition-colors"
+        class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur text-white font-semibold border border-white/30 transition-colors"
       >
         <Phone size={18} aria-hidden="true" />
         Ordina Subito
       </a>
     </div>
   </div>
+
+  <!-- Scroll cue at bottom -->
+  <a
+    href="#manifesto"
+    aria-label="Scorri per scoprire"
+    class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 inline-flex flex-col items-center gap-1 text-white/85 hover:text-white"
+  >
+    <span class="text-[10px] tracking-[0.3em] uppercase font-semibold">Scopri</span>
+    <ChevronDown size={20} aria-hidden="true" class="scroll-cue" />
+  </a>
 </section>

@@ -5,6 +5,7 @@ import SchemaOrgJsonLd from '../components/SchemaOrgJsonLd.astro';
 import FrictionlessContact from '../components/FrictionlessContact.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 
 interface Props {
   title?: string;
@@ -66,5 +67,6 @@ const ogImage = new URL(image, Astro.site ?? 'https://cuoreristopizza.it/').toSt
     </main>
     <Footer />
     <FrictionlessContact />
+    <ScrollReveal />
   </body>
 </html>
