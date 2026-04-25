@@ -106,8 +106,8 @@ const mapsQuery = encodeURIComponent(
   <div class="max-w-6xl mx-auto mt-12 px-5 md:px-8 pt-6 border-t border-black/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-[var(--color-ink-soft)]">
     <p>© {year} {BUSINESS.name}. Tutti i diritti riservati.</p>
     <nav class="flex items-center gap-5" aria-label="Legale">
-      <a href="/privacy-policy" class="hover:text-[var(--color-accent)]">Privacy</a>
-      <a href="/cookie-policy" class="hover:text-[var(--color-accent)]">Cookie</a>
+      <a href={`${import.meta.env.BASE_URL}privacy-policy`} class="hover:text-[var(--color-accent)]">Privacy</a>
+      <a href={`${import.meta.env.BASE_URL}cookie-policy`} class="hover:text-[var(--color-accent)]">Cookie</a>
     </nav>
   </div>
 </footer>
