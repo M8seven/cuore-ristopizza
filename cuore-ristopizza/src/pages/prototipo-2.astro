@@ -1,56 +1,44 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import IngredientSprite from '../components/IngredientSprite.astro';
 
-type Shape = 'tomato' | 'basil' | 'mozza' | 'olive' | 'chili' | 'mushroom' | 'salami' | 'garlic' | 'rucola';
-
-interface PizzaProto {
+interface PizzaCard {
   id: string;
   name: string;
   price: number;
   desc: string;
-  ingredients: { shape: Shape; angle: number; label: string }[];
+  ingredients: string[];
+  photo: string;
   badge?: 'heart' | 'spicy';
 }
 
-const pizzas: PizzaProto[] = [
+const base = import.meta.env.BASE_URL;
+
+const pizzas: PizzaCard[] = [
   {
     id: 'margherita',
     name: 'Margherita',
     price: 5.0,
-    desc: 'Pomodoro, fiordilatte.',
-    ingredients: [
-      { shape: 'tomato', angle: -50, label: 'Pomodoro' },
-      { shape: 'mozza',  angle: 30,  label: 'Fiordilatte' },
-      { shape: 'basil',  angle: 130, label: 'Basilico' },
-      { shape: 'olive',  angle: 210, label: 'Olio EVO' },
-    ],
+    desc: "L'essenziale: pomodoro San Marzano e fiordilatte filante.",
+    ingredients: ['Pomodoro', 'Fiordilatte', 'Basilico', 'Olio EVO'],
+    photo: `${base}photos/margherita.jpg`,
   },
   {
     id: 'diavola',
     name: 'Diavola',
     price: 7.0,
-    desc: 'Pomodoro, fiordilatte, spianata calabrese.',
+    desc: 'Calabrese piccante e mozzarella, una versione del Sud che non si tira indietro.',
+    ingredients: ['Pomodoro', 'Fiordilatte', 'Spianata Calabrese', "Pizzichio piccante"],
+    photo: `${base}photos/diavola.jpg`,
     badge: 'spicy',
-    ingredients: [
-      { shape: 'tomato', angle: -50, label: 'Pomodoro' },
-      { shape: 'mozza',  angle: 30,  label: 'Fiordilatte' },
-      { shape: 'salami', angle: 130, label: 'Calabrese' },
-      { shape: 'chili',  angle: 210, label: 'Pepperoncino' },
-    ],
   },
   {
     id: 'cuore',
     name: 'Cuore',
     price: 8.0,
-    desc: "Pomodoro, stracciatella, prosciutto crudo d'Oggiono, rucola.",
+    desc: "Servita a forma di cuore. Stracciatella, crudo d'Oggiono, rucola.",
+    ingredients: ['Pomodoro', 'Stracciatella', "Crudo d'Oggiono", 'Rucola'],
+    photo: `${base}photos/margherita-2.jpg`,
     badge: 'heart',
-    ingredients: [
-      { shape: 'tomato', angle: -50, label: 'Pomodoro' },
-      { shape: 'mozza',  angle: 30,  label: 'Stracciatella' },
-      { shape: 'salami', angle: 130, label: 'Crudo' },
-      { shape: 'rucola', angle: 210, label: 'Rucola' },
-    ],
   },
 ];
 
@@ -58,84 +46,100 @@ const priceFmt = (n: number) =>
   new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
 ---
 
-<BaseLayout title="Prototipo 2 — Ingredienti che esplodono" noindex={true}>
-  <IngredientSprite />
+<BaseLayout title="Prototipo 2 — Le nostre pizze" noindex={true}>
+  <section class="relative min-h-[100vh] py-20 md:py-28 bg-[#0d0907] text-white overflow-hidden">
+    <div
+      class="absolute inset-0 opacity-30 pointer-events-none"
+      style="background: radial-gradient(ellipse at 50% 20%, rgba(198,40,40,0.4), transparent 60%);"
+      aria-hidden="true"
+    ></div>
 
-  <section class="relative min-h-[100vh] py-20 md:py-28 bg-gradient-to-b from-[var(--color-cream)] to-[var(--color-cream-warm)]">
-    <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="relative max-w-6xl mx-auto px-5 md:px-8">
       <header class="reveal text-center max-w-2xl mx-auto mb-16">
-        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-accent)]">Prototipo 2 · v2</p>
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[#ff8a6a]">Prototipo 2 · v3</p>
         <h1 class="mt-4 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl">
-          Ingredienti<br />
-          <span class="italic font-normal text-[var(--color-accent)]">che esplodono.</span>
+          Le nostre<br />
+          <span class="italic font-normal text-[#ff8a6a]">pizze.</span>
         </h1>
-        <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-          Passa il mouse (o tocca) sopra una pizza. Gli ingredienti si dispongono attorno alla forma.
-          <span class="block text-sm mt-2 italic opacity-75">Su mobile, tocca la card per attivare l'effetto.</span>
+        <p class="mt-5 text-white/70 text-lg leading-relaxed">
+          Passa il mouse (o tocca) sopra una pizza. Gli ingredienti si rivelano attorno.
         </p>
       </header>
 
-      <div class="grid gap-8 md:grid-cols-3" data-reveal-stagger>
+      <div class="grid gap-7 md:grid-cols-3" data-reveal-stagger>
         {pizzas.map((pizza) => (
           <article
-            class="reveal pizza-card group relative bg-white rounded-[var(--radius-card-lg)] border border-black/5 shadow-md shadow-black/5 p-6 cursor-pointer overflow-visible transition-[transform,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/15"
+            class="reveal pizza-card group relative overflow-visible rounded-[var(--radius-card-lg)] cursor-pointer"
             tabindex="0"
+            data-card
           >
-            <!-- Plate / pizza visual -->
-            <div class="plate-wrap relative mx-auto aspect-square w-44 mb-5">
-              <svg viewBox="0 0 300 300" class="absolute inset-0 w-full h-full" aria-hidden="true">
-                <use href="#ing-pizza-plate" />
-              </svg>
-
-              <!-- Ingredients (realistic SVG) that fly out on hover -->
-              {pizza.ingredients.map((ing) => (
-                <span
-                  class="ingredient absolute top-1/2 left-1/2 select-none pointer-events-none w-12 h-12 -ml-6 -mt-6"
-                  style={`--angle: ${ing.angle}deg;`}
-                  aria-label={ing.label}
-                >
-                  <svg viewBox="0 0 100 100" class="w-full h-full" aria-hidden="true">
-                    <use href={`#ing-${ing.shape}`} />
-                  </svg>
-                </span>
-              ))}
+            <!-- Photo container with overlay -->
+            <div class="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card-lg)] shadow-xl shadow-black/40">
+              <img
+                src={pizza.photo}
+                alt={`Pizza ${pizza.name}`}
+                class="photo absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                loading="lazy"
+                decoding="async"
+              />
+              <!-- Dark gradient bottom for text legibility -->
+              <div
+                class="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-95"
+                style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, transparent 80%);"
+                aria-hidden="true"
+              ></div>
 
               <!-- Badge -->
               {pizza.badge === 'heart' && (
-                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-accent)] text-white text-xl shadow-lg z-10">❤</span>
+                <span class="absolute top-4 right-4 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-accent)] text-white text-lg shadow-lg z-10">❤</span>
               )}
               {pizza.badge === 'spicy' && (
-                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-700 text-lg shadow-lg z-10">🌶</span>
+                <span class="absolute top-4 right-4 inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-500/90 text-white text-lg shadow-lg z-10">🌶</span>
               )}
-            </div>
 
-            <h2 class="font-[family-name:var(--font-display)] text-3xl font-bold text-center">
-              {pizza.name}
-            </h2>
-            <p class="mt-2 text-sm text-[var(--color-ink-soft)] text-center leading-relaxed min-h-[3rem]">
-              {pizza.desc}
-            </p>
-            <div class="mt-4 flex items-center justify-center">
-              <data
-                value={pizza.price}
-                class="font-[family-name:var(--font-display)] text-3xl font-bold text-[var(--color-accent)]"
-              >
-                {priceFmt(pizza.price)}
-              </data>
-            </div>
+              <!-- Name + price (always visible, bottom) -->
+              <div class="absolute bottom-0 inset-x-0 p-6 z-10">
+                <h2 class="font-[family-name:var(--font-display)] text-3xl md:text-4xl font-bold drop-shadow-lg">
+                  {pizza.name}
+                </h2>
+                <div class="mt-1 flex items-baseline justify-between">
+                  <data
+                    value={pizza.price}
+                    class="font-[family-name:var(--font-display)] text-2xl font-bold text-[#ff8a6a]"
+                  >
+                    {priceFmt(pizza.price)}
+                  </data>
+                  <span class="text-xs text-white/60 italic">Passa sopra ↑</span>
+                </div>
+              </div>
 
-            <p class="hint mt-3 text-center text-xs text-[var(--color-ink-soft)] italic opacity-70 transition-opacity group-hover:opacity-0">
-              Passa sopra ↑
-            </p>
+              <!-- Ingredients reveal — slide up from bottom on hover -->
+              <div class="ingredients absolute inset-x-0 bottom-0 p-6 pt-20 pointer-events-none">
+                <p class="text-xs font-semibold tracking-widest uppercase text-[#ff8a6a] mb-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="transition-delay: 200ms;">Ingredienti</p>
+                <p class="text-sm text-white/80 leading-relaxed mb-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="transition-delay: 280ms;">
+                  {pizza.desc}
+                </p>
+                <ul class="flex flex-wrap gap-1.5">
+                  {pizza.ingredients.map((ing, i) => (
+                    <li
+                      class="ing-chip inline-flex items-center h-7 px-3 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-xs font-medium text-white opacity-0 -translate-y-2 transition-all duration-400"
+                      style={`transition-delay: ${340 + i * 70}ms;`}
+                    >
+                      {ing}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </article>
         ))}
       </div>
 
       <div class="mt-16 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="prototipo-1" class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-[var(--color-ink)] text-white font-semibold hover:bg-black transition-colors">
+        <a href="prototipo-1" class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white text-[#0d0907] font-semibold hover:bg-white/90 transition-colors">
           ← Vedi Prototipo 1
         </a>
-        <a href={import.meta.env.BASE_URL} class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white border border-black/10 text-[var(--color-ink)] font-semibold hover:bg-black/5 transition-colors">
+        <a href={import.meta.env.BASE_URL} class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/15 transition-colors">
           Torna al sito
         </a>
       </div>
@@ -143,51 +147,25 @@ const priceFmt = (n: number) =>
   </section>
 
   <style>
-    .ingredient {
-      transform: translate(0, 0) rotate(var(--angle, 0deg)) translateX(0) rotate(calc(var(--angle, 0deg) * -1)) scale(0);
-      opacity: 0;
-      transition:
-        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-        opacity 0.4s ease;
-      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
-    }
-    .pizza-card:hover .ingredient,
-    .pizza-card:focus-within .ingredient,
-    .pizza-card.is-active .ingredient {
-      transform: translate(0, 0) rotate(var(--angle, 0deg)) translateX(108px) rotate(calc(var(--angle, 0deg) * -1)) scale(1);
+    /* Hover state — chips animate in */
+    .pizza-card:hover .ing-chip,
+    .pizza-card:focus-within .ing-chip,
+    .pizza-card.is-active .ing-chip {
       opacity: 1;
+      transform: translateY(0);
     }
-    /* SVG is at position 1, so ingredients start at position 2 (no extra delay) */
-    .pizza-card:hover .ingredient:nth-child(3),
-    .pizza-card:focus-within .ingredient:nth-child(3),
-    .pizza-card.is-active .ingredient:nth-child(3) { transition-delay: 0.06s; }
-    .pizza-card:hover .ingredient:nth-child(4),
-    .pizza-card:focus-within .ingredient:nth-child(4),
-    .pizza-card.is-active .ingredient:nth-child(4) { transition-delay: 0.12s; }
-    .pizza-card:hover .ingredient:nth-child(5),
-    .pizza-card:focus-within .ingredient:nth-child(5),
-    .pizza-card.is-active .ingredient:nth-child(5) { transition-delay: 0.18s; }
-
-    /* Subtle continuous wobble on the pizza plate while card is hovered */
-    @keyframes plate-wobble {
-      0%, 100% { transform: rotate(0deg); }
-      50%      { transform: rotate(2deg); }
+    /* Card lift */
+    .pizza-card {
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .pizza-card:hover .plate-wrap > svg:first-child {
-      animation: plate-wobble 4s ease-in-out infinite;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ingredient {
-        transition: opacity 0.2s ease;
-        transform: rotate(var(--angle, 0deg)) translateX(108px) rotate(calc(var(--angle, 0deg) * -1)) scale(1);
-        opacity: 1;
-      }
+    .pizza-card:hover, .pizza-card:focus-within {
+      transform: translateY(-6px);
     }
   </style>
 
   <script>
-    document.querySelectorAll<HTMLElement>('.pizza-card').forEach((card) => {
+    // Mobile fallback — toggle .is-active on tap
+    document.querySelectorAll<HTMLElement>('[data-card]').forEach((card) => {
       card.addEventListener('click', (e) => {
         if ((e.target as HTMLElement).closest('a')) return;
         if (!window.matchMedia('(hover: hover)').matches) {

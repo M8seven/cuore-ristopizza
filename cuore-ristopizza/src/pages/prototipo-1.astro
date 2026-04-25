@@ -1,110 +1,98 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import IngredientSprite from '../components/IngredientSprite.astro';
 
-interface Ingredient {
-  id: string;
-  label: string;
-  /** position in % of stage */
-  x: number;
-  y: number;
-  /** parallax sensitivity 0-1, higher = closer to viewer */
-  depth: number;
-  /** size in px */
-  size: number;
-  /** keyframe duration in seconds */
-  dur: number;
-  /** keyframe delay (negative shifts phase) */
-  delay: number;
-  /** initial rotation deg */
-  rot: number;
-  shape: 'tomato' | 'basil' | 'mozza' | 'olive' | 'chili' | 'mushroom' | 'salami' | 'garlic' | 'rucola';
-}
-
-const ingredients: Ingredient[] = [
-  { id: 'tomato-1', shape: 'tomato',   label: 'Pomodoro',     x: 14, y: 8,  depth: 0.85, size: 92, dur: 6.2, delay: 0,   rot: -12 },
-  { id: 'basil-1',  shape: 'basil',    label: 'Basilico',     x: 78, y: 6,  depth: 0.7,  size: 80, dur: 7.1, delay: 0.4, rot: 22  },
-  { id: 'mozza-1',  shape: 'mozza',    label: 'Mozzarella',   x: 8,  y: 62, depth: 0.6,  size: 74, dur: 5.8, delay: 0.9, rot: 8   },
-  { id: 'olive-1',  shape: 'olive',    label: 'Olive nere',   x: 86, y: 56, depth: 0.75, size: 68, dur: 5.4, delay: 0.2, rot: -22 },
-  { id: 'chili-1',  shape: 'chili',    label: 'Pepperoncino', x: 44, y: 3,  depth: 0.95, size: 72, dur: 6.6, delay: 1.2, rot: 10  },
-  { id: 'mush-1',   shape: 'mushroom', label: 'Funghi',       x: 62, y: 84, depth: 0.55, size: 76, dur: 6.4, delay: 0.7, rot: -6  },
-  { id: 'basil-2',  shape: 'basil',    label: 'Basilico',     x: 4,  y: 32, depth: 0.8,  size: 64, dur: 5.6, delay: 1.5, rot: -28 },
-  { id: 'sal-1',    shape: 'salami',   label: 'Spianata',     x: 92, y: 26, depth: 0.65, size: 78, dur: 6.0, delay: 0.3, rot: 16  },
+// Hotspots: posizione (%) sulla foto della pizza dove vive ogni ingrediente.
+// I valori andrebbero affinati visualmente sulla foto reale del cliente quando arriva.
+const hotspots = [
+  { id: 'pomodoro',   label: 'Pomodoro San Marzano', x: 38, y: 35, dur: 2.4 },
+  { id: 'mozza',      label: 'Fiordilatte',          x: 62, y: 28, dur: 2.8 },
+  { id: 'basilico',   label: 'Basilico fresco',      x: 50, y: 58, dur: 2.6 },
+  { id: 'olio',       label: 'Olio EVO',             x: 30, y: 68, dur: 3.0 },
+  { id: 'crosta',     label: 'Crosta lievitata 24h', x: 14, y: 14, dur: 3.2 },
+  { id: 'forno',      label: 'Forno a legna 450°',   x: 84, y: 76, dur: 2.2 },
 ];
+
+const photo = `${import.meta.env.BASE_URL}photos/pizza-hero.jpg`;
 ---
 
 <BaseLayout title="Prototipo 1 — Anatomia della pizza" noindex={true}>
-  <IngredientSprite />
-
-  <section class="relative min-h-[100vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[var(--color-cream)] via-[var(--color-cream-warm)] to-[var(--color-cream)]">
+  <section class="relative min-h-[100vh] flex items-center justify-center overflow-hidden bg-[#0d0907]">
+    <!-- Ambient warm radial glow -->
     <div
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full opacity-50 blur-3xl pointer-events-none"
-      style="background: radial-gradient(circle, rgba(198,40,40,0.22), transparent 60%);"
+      class="absolute inset-0 opacity-40 pointer-events-none"
+      style="background: radial-gradient(ellipse at 50% 40%, rgba(198,40,40,0.35), transparent 60%);"
       aria-hidden="true"
     ></div>
 
-    <div class="relative max-w-5xl w-full mx-auto px-5 md:px-8 py-20 md:py-28">
-      <header class="reveal text-center max-w-2xl mx-auto mb-16">
-        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-accent)]">Prototipo 1 · v2</p>
+    <div class="relative max-w-6xl w-full mx-auto px-5 md:px-8 py-20 md:py-28 text-white">
+      <header class="reveal text-center max-w-2xl mx-auto mb-12">
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[#ff8a6a]">Prototipo 1 · v3</p>
         <h1 class="mt-4 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl">
           Anatomia<br />
-          <span class="italic font-normal text-[var(--color-accent)]">di una pizza.</span>
+          <span class="italic font-normal text-[#ff8a6a]">di una pizza.</span>
         </h1>
-        <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-          Muovi il mouse sopra la pizza. Il piano si inclina, gli ingredienti si spostano in profondità.
-          <span class="block text-sm mt-2 italic opacity-75">Click su un ingrediente per farlo cadere sulla pizza.</span>
+        <p class="mt-5 text-white/70 text-lg leading-relaxed">
+          Passa il mouse sopra la pizza. Ogni cerchio rivela un ingrediente.
+          <span class="block text-sm mt-2 italic opacity-75">Foto stock placeholder — sarà sostituita con foto del ristorante.</span>
         </p>
       </header>
 
-      <div class="reveal relative mx-auto max-w-[640px] w-full" style="perspective: 1400px;" data-pizza-stage>
-        <div class="relative aspect-square mx-auto transition-transform duration-200 ease-out" style="transform-style: preserve-3d;" data-pizza-tilt>
-          <svg viewBox="0 0 300 300" class="absolute inset-0 w-full h-full drop-shadow-2xl" aria-hidden="true">
-            <use href="#ing-pizza-plate" />
-          </svg>
+      <!-- Stage with perspective + Ken Burns base -->
+      <div class="reveal relative mx-auto max-w-[720px] w-full" style="perspective: 1600px;" data-stage>
+        <div
+          class="pizza-frame relative aspect-square mx-auto rounded-full overflow-hidden shadow-2xl shadow-black/70"
+          style="transform-style: preserve-3d;"
+          data-tilt
+        >
+          <!-- The real photo — Ken Burns slow zoom -->
+          <img
+            src={photo}
+            alt="Pizza margherita vista dall'alto"
+            class="ken-burns absolute inset-0 w-full h-full object-cover"
+            fetchpriority="high"
+            decoding="async"
+          />
 
-          {ingredients.map((ing) => {
-            const blur = (1 - ing.depth) * 1.2;
-            const opacity = 0.6 + ing.depth * 0.4;
-            return (
-              <button
-                type="button"
-                class="ingredient absolute select-none cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-full"
-                aria-label={ing.label}
-                data-depth={ing.depth}
-                style={`
-                  left: ${ing.x}%;
-                  top: ${ing.y}%;
-                  width: ${ing.size}px;
-                  height: ${ing.size}px;
-                  margin-left: ${-ing.size / 2}px;
-                  margin-top: ${-ing.size / 2}px;
-                  --rot: ${ing.rot}deg;
-                  --depth: ${ing.depth};
-                  --dur-a: ${ing.dur}s;
-                  --dur-b: ${(ing.dur * 1.3).toFixed(2)}s;
-                  --delay: -${ing.delay}s;
-                  filter: blur(${blur.toFixed(2)}px) drop-shadow(0 ${(8 + ing.depth * 12).toFixed(0)}px ${(12 + ing.depth * 14).toFixed(0)}px rgba(0,0,0,${(0.16 + ing.depth * 0.18).toFixed(2)}));
-                  opacity: ${opacity.toFixed(2)};
-                  transform: translateZ(${(ing.depth * 80).toFixed(0)}px);
-                `}
-              >
-                <svg viewBox="0 0 100 100" class="ing-svg w-full h-full pointer-events-none">
-                  <use href={`#ing-${ing.shape}`} />
-                </svg>
-                <span class="ing-label absolute left-1/2 -bottom-7 -translate-x-1/2 px-2.5 py-1 rounded-full bg-[var(--color-ink)] text-white text-[11px] font-semibold whitespace-nowrap opacity-0 transition-opacity">
-                  {ing.label}
-                </span>
-              </button>
-            );
-          })}
+          <!-- Vignette overlay for depth -->
+          <div
+            class="absolute inset-0 pointer-events-none"
+            style="background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.4) 90%);"
+            aria-hidden="true"
+          ></div>
+
+          <!-- Interactive hotspots -->
+          {hotspots.map((h) => (
+            <button
+              type="button"
+              class="hotspot absolute"
+              style={`left: ${h.x}%; top: ${h.y}%; --dur: ${h.dur}s;`}
+              data-hotspot={h.id}
+              aria-label={h.label}
+            >
+              <span class="hot-ring" aria-hidden="true"></span>
+              <span class="hot-ring hot-ring-2" aria-hidden="true"></span>
+              <span class="hot-dot" aria-hidden="true"></span>
+              <span class="hot-label">{h.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <!-- Caption strip below pizza -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/60">
+          {hotspots.map((h) => (
+            <span class="legend-chip inline-flex items-center gap-2 px-3 h-8 rounded-full border border-white/10 hover:border-[#ff8a6a]/60 hover:bg-white/5 transition-colors cursor-pointer" data-legend={h.id}>
+              <span class="w-1.5 h-1.5 rounded-full bg-[#ff8a6a]"></span>
+              {h.label}
+            </span>
+          ))}
         </div>
       </div>
 
-      <div class="reveal mt-16 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="prototipo-2" class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-[var(--color-ink)] text-white font-semibold hover:bg-black transition-colors">
+      <div class="reveal mt-14 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="prototipo-2" class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white text-[#0d0907] font-semibold hover:bg-white/90 transition-colors">
           Vedi Prototipo 2 →
         </a>
-        <a href={import.meta.env.BASE_URL} class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white border border-black/10 text-[var(--color-ink)] font-semibold hover:bg-black/5 transition-colors">
+        <a href={import.meta.env.BASE_URL} class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/15 transition-colors">
           ← Torna al sito
         </a>
       </div>
@@ -112,73 +100,128 @@ const ingredients: Ingredient[] = [
   </section>
 
   <style>
-    @keyframes drift-a {
-      0%, 100% { translate: 0 0; }
-      25%      { translate: 6px -10px; }
-      50%      { translate: -4px -16px; }
-      75%      { translate: -8px -6px; }
+    /* Slow cinematic zoom on the photo */
+    @keyframes ken-burns {
+      0%   { transform: scale(1) translate(0, 0); }
+      50%  { transform: scale(1.08) translate(-1%, 1%); }
+      100% { transform: scale(1) translate(0, 0); }
     }
-    @keyframes drift-b {
-      0%, 100% { rotate: var(--rot, 0deg); }
-      33%      { rotate: calc(var(--rot, 0deg) + 6deg); }
-      66%      { rotate: calc(var(--rot, 0deg) - 4deg); }
+    .ken-burns {
+      animation: ken-burns 24s ease-in-out infinite;
+      will-change: transform;
     }
-    .ingredient .ing-svg {
-      animation:
-        drift-a var(--dur-a, 6s) ease-in-out infinite var(--delay, 0s),
-        drift-b var(--dur-b, 8s) ease-in-out infinite var(--delay, 0s);
-      will-change: translate, rotate;
+
+    /* Hotspots */
+    .hotspot {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      margin: -11px 0 0 -11px;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      z-index: 10;
     }
-    .ingredient {
-      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s;
+    .hot-dot {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #ff8a6a;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55), 0 0 18px rgba(255, 138, 106, 0.55);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .ingredient:hover .ing-label,
-    .ingredient:focus-visible .ing-label {
+    .hot-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1.5px solid #ff8a6a;
+      animation: pulse-ring var(--dur, 2.6s) cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      opacity: 0;
+    }
+    .hot-ring-2 {
+      animation-delay: calc(var(--dur, 2.6s) / -2);
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(0.8); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: scale(3.4); opacity: 0; }
+    }
+
+    .hot-label {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 14px);
+      transform: translate(-50%, 6px);
+      white-space: nowrap;
+      padding: 6px 12px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      background: rgba(13, 9, 7, 0.95);
+      border: 1px solid rgba(255, 138, 106, 0.4);
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+    .hot-label::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: rgba(13, 9, 7, 0.95);
+    }
+
+    .hotspot:hover .hot-dot,
+    .hotspot:focus-visible .hot-dot,
+    .hotspot.is-active .hot-dot {
+      transform: scale(1.5);
+    }
+    .hotspot:hover .hot-label,
+    .hotspot:focus-visible .hot-label,
+    .hotspot.is-active .hot-label {
       opacity: 1;
+      transform: translate(-50%, 0);
     }
-    .ingredient:hover {
-      transform: translateZ(calc(var(--depth, 0.5) * 80px)) scale(1.12);
-      z-index: 30;
+    .hotspot:hover ~ .hotspot .hot-ring,
+    .hotspot:focus-visible ~ .hotspot .hot-ring {
+      animation-play-state: paused;
+      opacity: 0.3;
     }
-    @keyframes drop-onto-pizza {
-      0%   { translate: 0 0; transform: translateZ(calc(var(--depth, 0.5) * 80px)) scale(1); opacity: 1; }
-      40%  { transform: translateZ(20px) scale(0.85); }
-      55%  { transform: translateZ(0) scale(0.6); }
-      75%  { transform: translateZ(0) scale(0.8); }
-      100% { translate: var(--drop-x, 0px) var(--drop-y, 0px); transform: translateZ(0) scale(0.7); opacity: 0.9; }
-    }
-    .ingredient.is-dropping .ing-svg { animation-play-state: paused; }
-    .ingredient.is-dropping {
-      animation: drop-onto-pizza 0.9s cubic-bezier(0.5, -0.15, 0.5, 1.4) forwards;
-    }
+
+    /* Legend chip → highlight related hotspot */
+    .legend-chip:hover { color: white; }
+
     @media (prefers-reduced-motion: reduce) {
-      .ingredient .ing-svg { animation: none; }
+      .ken-burns { animation: none; }
+      .hot-ring { animation: none; opacity: 0.4; transform: scale(1.5); }
     }
   </style>
 
   <script>
-    const stage = document.querySelector<HTMLElement>('[data-pizza-stage]');
-    const tilt = document.querySelector<HTMLElement>('[data-pizza-tilt]');
-    const ingredients = document.querySelectorAll<HTMLElement>('.ingredient');
-
+    // 3D mouse tilt on the pizza frame
+    const stage = document.querySelector<HTMLElement>('[data-stage]');
+    const tilt = document.querySelector<HTMLElement>('[data-tilt]');
     if (stage && tilt && window.matchMedia('(hover: hover)').matches) {
       let raf = 0;
-      let tx = 0, ty = 0;
-      let cx = 0, cy = 0;
-
+      let tx = 0, ty = 0, cx = 0, cy = 0;
       stage.addEventListener('mousemove', (e) => {
         const rect = stage.getBoundingClientRect();
         const px = (e.clientX - rect.left) / rect.width - 0.5;
         const py = (e.clientY - rect.top) / rect.height - 0.5;
-        tx = py * -10;
-        ty = px * 14;
+        tx = py * -8;
+        ty = px * 12;
         if (!raf) raf = requestAnimationFrame(animate);
       });
       stage.addEventListener('mouseleave', () => {
         tx = 0; ty = 0;
         if (!raf) raf = requestAnimationFrame(animate);
       });
-
       function animate() {
         cx += (tx - cx) * 0.08;
         cy += (ty - cy) * 0.08;
@@ -191,23 +234,17 @@ const ingredients: Ingredient[] = [
       }
     }
 
-    ingredients.forEach((ing) => {
-      ing.addEventListener('click', () => {
-        if (ing.classList.contains('is-dropping')) return;
-        const stageRect = tilt?.getBoundingClientRect();
-        const ingRect = ing.getBoundingClientRect();
-        if (!stageRect) return;
-        const targetX = stageRect.left + stageRect.width / 2 - (ingRect.left + ingRect.width / 2);
-        const targetY = stageRect.top + stageRect.height / 2 - (ingRect.top + ingRect.height / 2);
-        ing.style.setProperty('--drop-x', `${targetX}px`);
-        ing.style.setProperty('--drop-y', `${targetY}px`);
-        ing.classList.add('is-dropping');
-        setTimeout(() => {
-          ing.classList.remove('is-dropping');
-          ing.style.removeProperty('--drop-x');
-          ing.style.removeProperty('--drop-y');
-        }, 1500);
-      });
+    // Legend chips link to hotspots
+    document.querySelectorAll<HTMLElement>('[data-legend]').forEach((chip) => {
+      const id = chip.dataset.legend;
+      const target = document.querySelector<HTMLElement>(`[data-hotspot="${id}"]`);
+      if (!target) return;
+      const activate = () => target.classList.add('is-active');
+      const deactivate = () => target.classList.remove('is-active');
+      chip.addEventListener('mouseenter', activate);
+      chip.addEventListener('mouseleave', deactivate);
+      chip.addEventListener('focus', activate);
+      chip.addEventListener('blur', deactivate);
     });
   </script>
 </BaseLayout>

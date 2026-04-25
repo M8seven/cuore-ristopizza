@@ -1,0 +1,15 @@
+# Repo-root ignores (Astro project lives in cuore-ristopizza/, has its own .gitignore)
+
+# Stray node_modules / package files if any tool ever creates them at root
+node_modules/
+package-lock.json
+package.json
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs / tmp
+*.log
+.cache/

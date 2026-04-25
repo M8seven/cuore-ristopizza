@@ -6,9 +6,8 @@ import SectionNumber from './SectionNumber.astro';
 
 const { name, price, ingredients, description, available } = monthlySpecial;
 
-// Unsplash placeholder — swap with real photo pre-deploy
-const specialImage =
-  'https://images.unsplash.com/photo-1604917877934-07d8d248d396?auto=format&fit=crop&w=1600&q=80';
+// Real photo (Roberto V. Minasi / Unsplash). Sostituire con foto del cliente pre-deploy.
+const specialImage = `${import.meta.env.BASE_URL}photos/pizza-wood.jpg`;
 
 const priceFormatted = new Intl.NumberFormat('it-IT', {
   style: 'currency',

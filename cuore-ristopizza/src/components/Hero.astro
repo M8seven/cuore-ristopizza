@@ -2,9 +2,8 @@
 import { ArrowRight, Phone, ChevronDown } from '@lucide/astro';
 import { BUSINESS } from '../data/business';
 
-// Unsplash placeholder — swap with real photo pre-deploy
-const heroImage =
-  'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80';
+// Real photo (Luigi Boccardo / Unsplash). Sostituire con foto del cliente pre-deploy.
+const heroImage = `${import.meta.env.BASE_URL}photos/pizza-rustic.jpg`;
 ---
 
 <section class="relative overflow-hidden min-h-[88vh] md:min-h-[92vh] flex items-center" aria-label="Hero">
