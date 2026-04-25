@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Floating ingredients — each has a starting position, rotation, depth (for mouse parallax),
+// and animation offset (so they don't all bounce in sync)
+const ingredients = [
+  { id: 'tomato',     emoji: '🍅', x: 18, y: 12, depth: 0.6, dur: 5.2, delay: 0,    rot: -10 },
+  { id: 'basil-1',    emoji: '🌿', x: 72, y: 8,  depth: 0.5, dur: 6.4, delay: 0.4,  rot: 15  },
+  { id: 'mozza',      emoji: '🧀', x: 12, y: 65, depth: 0.45, dur: 5.8, delay: 0.8, rot: 8   },
+  { id: 'olive',      emoji: '🫒', x: 84, y: 58, depth: 0.55, dur: 4.8, delay: 0.2, rot: -20 },
+  { id: 'chili',      emoji: '🌶️', x: 42, y: 5,  depth: 0.7, dur: 5.6, delay: 1.1, rot: 12  },
+  { id: 'mushroom',   emoji: '🍄', x: 60, y: 78, depth: 0.4, dur: 6.0, delay: 0.6, rot: -8  },
+  { id: 'basil-2',    emoji: '🌿', x: 8,  y: 38, depth: 0.65, dur: 5.4, delay: 1.4, rot: -25 },
+  { id: 'salami',     emoji: '🥩', x: 90, y: 30, depth: 0.5, dur: 5.0, delay: 0.3, rot: 18  },
+];
+---
+
+<BaseLayout title="Prototipo 1 — Anatomia della pizza" noindex={true}>
+  <section class="relative min-h-[100vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[var(--color-cream)] via-[var(--color-cream-warm)] to-[var(--color-cream)]">
+    <!-- Soft radial glow behind pizza -->
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full opacity-40 blur-3xl pointer-events-none"
+      style="background: radial-gradient(circle, rgba(198,40,40,0.18), transparent 60%);"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-5xl w-full mx-auto px-5 md:px-8 py-20 md:py-28">
+      <header class="reveal text-center max-w-2xl mx-auto mb-16">
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-accent)]">Prototipo 1</p>
+        <h1 class="mt-4 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl">
+          Anatomia<br />
+          <span class="italic font-normal text-[var(--color-accent)]">di una pizza.</span>
+        </h1>
+        <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
+          Muovi il mouse sulla pizza. Ogni ingrediente ha una vita propria.
+          <span class="block text-sm mt-2 italic opacity-75">Su mobile gli ingredienti fluttuano in continuo — il parallax mouse è solo desktop.</span>
+        </p>
+      </header>
+
+      <!-- Pizza stage -->
+      <div
+        id="pizza-stage"
+        class="reveal relative mx-auto aspect-square max-w-[520px] w-full"
+        data-pizza-stage
+      >
+        <!-- The pizza itself (SVG) -->
+        <svg
+          viewBox="0 0 300 300"
+          class="absolute inset-0 w-full h-full drop-shadow-2xl"
+          aria-hidden="true"
+          data-depth="0.15"
+        >
+          <!-- Wooden board / crust shadow -->
+          <circle cx="150" cy="150" r="148" fill="#3a2418" opacity="0.18" />
+          <!-- Crust outer -->
+          <circle cx="150" cy="150" r="142" fill="#d4a76a" />
+          <!-- Crust inner highlight -->
+          <circle cx="150" cy="150" r="142" fill="url(#crustGloss)" />
+          <!-- Tomato sauce -->
+          <circle cx="150" cy="150" r="124" fill="#c33828" />
+          <circle cx="150" cy="150" r="124" fill="url(#sauceTexture)" opacity="0.7" />
+          <!-- Mozzarella blobs -->
+          <ellipse cx="118" cy="120" rx="22" ry="18" fill="#fefef0" opacity="0.92" />
+          <ellipse cx="180" cy="135" rx="26" ry="20" fill="#fefef0" opacity="0.92" />
+          <ellipse cx="155" cy="180" rx="24" ry="19" fill="#fefef0" opacity="0.92" />
+          <ellipse cx="105" cy="180" rx="20" ry="16" fill="#fefef0" opacity="0.92" />
+          <ellipse cx="195" cy="195" rx="18" ry="15" fill="#fefef0" opacity="0.92" />
+          <ellipse cx="135" cy="100" rx="14" ry="11" fill="#fefef0" opacity="0.92" />
+          <!-- Subtle char marks on crust -->
+          <circle cx="60" cy="80" r="3" fill="#3a2418" opacity="0.4" />
+          <circle cx="240" cy="100" r="2.5" fill="#3a2418" opacity="0.4" />
+          <circle cx="220" cy="240" r="3" fill="#3a2418" opacity="0.4" />
+          <circle cx="80" cy="230" r="2.5" fill="#3a2418" opacity="0.4" />
+
+          <defs>
+            <radialGradient id="crustGloss" cx="50%" cy="35%">
+              <stop offset="0%" stop-color="#f0c98a" stop-opacity="0.6" />
+              <stop offset="100%" stop-color="#d4a76a" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="sauceTexture" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#e85540" stop-opacity="0.5" />
+              <stop offset="100%" stop-color="#a52818" stop-opacity="0.3" />
+            </radialGradient>
+          </defs>
+        </svg>
+
+        <!-- Floating ingredients overlay -->
+        {ingredients.map((ing) => (
+          <span
+            class="absolute text-4xl md:text-5xl select-none pointer-events-none float-ingredient"
+            style={`
+              left: ${ing.x}%;
+              top: ${ing.y}%;
+              animation-duration: ${ing.dur}s;
+              animation-delay: -${ing.delay}s;
+              --rot: ${ing.rot}deg;
+              filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
+            `}
+            data-depth={ing.depth}
+            aria-hidden="true"
+          >
+            {ing.emoji}
+          </span>
+        ))}
+      </div>
+
+      <div class="reveal mt-16 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href="prototipo-2"
+          class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-[var(--color-ink)] text-white font-semibold hover:bg-black transition-colors"
+        >
+          Vedi Prototipo 2 →
+        </a>
+        <a
+          href={import.meta.env.BASE_URL}
+          class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white border border-black/10 text-[var(--color-ink)] font-semibold hover:bg-black/5 transition-colors"
+        >
+          ← Torna al sito
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    @keyframes float-up {
+      0%, 100% {
+        transform: translate(0, 0) rotate(var(--rot, 0deg));
+      }
+      50% {
+        transform: translate(0, -14px) rotate(calc(var(--rot, 0deg) + 6deg));
+      }
+    }
+    .float-ingredient {
+      animation: float-up linear infinite;
+      transform-origin: center;
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+    @media (hover: hover) {
+      [data-pizza-stage]:hover .float-ingredient {
+        animation-play-state: paused;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .float-ingredient { animation: none; }
+    }
+  </style>
+
+  <script>
+    // Mouse parallax — translate each ingredient inversely to the cursor position,
+    // weighted by the per-element data-depth.
+    const stage = document.querySelector<HTMLElement>('[data-pizza-stage]');
+    if (stage && window.matchMedia('(hover: hover)').matches) {
+      const ings = stage.querySelectorAll<HTMLElement>('[data-depth]');
+      let raf = 0;
+      let targetX = 0, targetY = 0;
+      let curX = 0, curY = 0;
+
+      stage.addEventListener('mousemove', (e) => {
+        const rect = stage.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        targetX = (e.clientX - cx) / rect.width;
+        targetY = (e.clientY - cy) / rect.height;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+      stage.addEventListener('mouseleave', () => {
+        targetX = 0; targetY = 0;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      function tick() {
+        curX += (targetX - curX) * 0.12;
+        curY += (targetY - curY) * 0.12;
+        ings.forEach((el) => {
+          const depth = parseFloat(el.dataset.depth || '0.4');
+          const tx = -curX * 50 * depth;
+          const ty = -curY * 50 * depth;
+          // Combine parallax with the float keyframe — we set CSS vars consumed by an extra wrapper translation
+          el.style.setProperty('translate', `${tx}px ${ty}px`);
+        });
+        if (Math.abs(curX - targetX) > 0.001 || Math.abs(curY - targetY) > 0.001) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          raf = 0;
+        }
+      }
+    }
+  </script>
+</BaseLayout>
