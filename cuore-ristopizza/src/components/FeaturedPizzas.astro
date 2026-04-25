@@ -1,0 +1,175 @@
+---
+import SectionNumber from './SectionNumber.astro';
+
+interface PizzaCard {
+  id: string;
+  name: string;
+  price: number;
+  desc: string;
+  ingredients: string[];
+  photo: string;
+  badge?: 'heart' | 'spicy';
+}
+
+const base = import.meta.env.BASE_URL;
+
+const pizzas: PizzaCard[] = [
+  {
+    id: 'margherita',
+    name: 'Margherita',
+    price: 5.0,
+    desc: "L'essenziale: pomodoro San Marzano e fiordilatte filante.",
+    ingredients: ['Pomodoro', 'Fiordilatte', 'Basilico', 'Olio EVO'],
+    photo: `${base}photos/margherita.jpg`,
+  },
+  {
+    id: 'diavola',
+    name: 'Diavola',
+    price: 7.0,
+    desc: 'Calabrese piccante e mozzarella, una versione del Sud che non si tira indietro.',
+    ingredients: ['Pomodoro', 'Fiordilatte', 'Spianata Calabrese', 'Pizzichio piccante'],
+    photo: `${base}photos/diavola.jpg`,
+    badge: 'spicy',
+  },
+  {
+    id: 'cuore',
+    name: 'Cuore',
+    price: 8.0,
+    desc: "Servita a forma di cuore. Stracciatella, crudo d'Oggiono e rucola fresca.",
+    ingredients: ['Pomodoro', 'Stracciatella', "Crudo d'Oggiono", 'Rucola'],
+    photo: `${base}photos/margherita-2.jpg`,
+    badge: 'heart',
+  },
+];
+
+const priceFmt = (n: number) =>
+  new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
+---
+
+<section
+  id="signature"
+  class="relative py-20 md:py-28 bg-[#0d0907] text-white overflow-hidden scroll-mt-20"
+  aria-labelledby="signature-title"
+>
+  <!-- Ambient warm radial -->
+  <div
+    class="absolute inset-0 opacity-25 pointer-events-none"
+    style="background: radial-gradient(ellipse at 50% 0%, rgba(198,40,40,0.45), transparent 55%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative max-w-6xl mx-auto px-5 md:px-8">
+    <div class="reveal max-w-3xl mb-12">
+      <SectionNumber num="03" label="Le nostre pizze" tone="dark" />
+      <h2
+        id="signature-title"
+        class="font-[family-name:var(--font-display)] font-bold text-3xl md:text-5xl lg:text-6xl"
+      >
+        Le firme<br />
+        <span class="italic font-normal text-[#ff8a6a]">della casa.</span>
+      </h2>
+      <p class="mt-5 text-lg text-white/70 leading-relaxed">
+        Tre pizze che raccontano chi siamo: la classica perfetta, la piccante calabrese, e la
+        nostra pizza a forma di cuore. Passa sopra per scoprire gli ingredienti.
+      </p>
+    </div>
+
+    <div class="grid gap-7 md:grid-cols-3" data-reveal-stagger>
+      {pizzas.map((pizza) => (
+        <article
+          class="reveal pizza-card group relative rounded-[var(--radius-card-lg)] overflow-hidden cursor-pointer shadow-xl shadow-black/40"
+          tabindex="0"
+          data-card
+        >
+          <div class="relative aspect-[3/4] overflow-hidden">
+            <img
+              src={pizza.photo}
+              alt={`Pizza ${pizza.name}`}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+              loading="lazy"
+              decoding="async"
+            />
+            {pizza.badge === 'heart' && (
+              <span class="absolute top-4 right-4 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-accent)] text-white text-lg shadow-lg z-20">❤</span>
+            )}
+            {pizza.badge === 'spicy' && (
+              <span class="absolute top-4 right-4 inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-500/90 text-white text-lg shadow-lg z-20">🌶</span>
+            )}
+            <div
+              class="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/30 group-focus-within:bg-black/30 group-[.is-active]:bg-black/30"
+              aria-hidden="true"
+            ></div>
+          </div>
+
+          <div class="absolute inset-x-0 bottom-0 z-10">
+            <div
+              class="relative px-6 pb-5 pt-12"
+              style="background: linear-gradient(to top, rgba(13,9,7,0.95) 0%, rgba(13,9,7,0.7) 60%, transparent 100%);"
+            >
+              <div class="flex items-end justify-between gap-3">
+                <h3 class="font-[family-name:var(--font-display)] text-3xl md:text-4xl font-bold leading-tight drop-shadow-lg">
+                  {pizza.name}
+                </h3>
+                <data
+                  value={pizza.price}
+                  class="font-[family-name:var(--font-display)] text-2xl font-bold text-[#ff8a6a] shrink-0"
+                >
+                  {priceFmt(pizza.price)}
+                </data>
+              </div>
+              <p class="mt-1 text-xs text-white/50 italic transition-opacity duration-300 group-hover:opacity-0 group-focus-within:opacity-0 group-[.is-active]:opacity-0">
+                Passa sopra ↑
+              </p>
+            </div>
+
+            <div
+              class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:max-h-[280px] group-focus-within:max-h-[280px] group-[.is-active]:max-h-[280px]"
+              style="background: rgba(13,9,7,0.95);"
+            >
+              <div class="px-6 pt-2 pb-6">
+                <p class="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#ff8a6a]/80 mb-2">Ingredienti</p>
+                <p class="text-sm text-white/75 leading-relaxed mb-4">{pizza.desc}</p>
+                <ul class="flex flex-wrap gap-1.5">
+                  {pizza.ingredients.map((ing, i) => (
+                    <li
+                      class="ing-chip inline-flex items-center h-7 px-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-xs font-medium text-white opacity-0 -translate-y-2 transition-all duration-400"
+                      style={`transition-delay: ${100 + i * 70}ms;`}
+                    >
+                      {ing}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pizza-card:hover .ing-chip,
+  .pizza-card:focus-within .ing-chip,
+  .pizza-card.is-active .ing-chip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .pizza-card {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pizza-card:hover, .pizza-card:focus-within, .pizza-card.is-active {
+    transform: translateY(-6px);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('#signature [data-card]').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) return;
+      if (!window.matchMedia('(hover: hover)').matches) {
+        card.classList.toggle('is-active');
+      }
+    });
+  });
+</script>
