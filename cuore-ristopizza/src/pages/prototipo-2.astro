@@ -1,13 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import IngredientSprite from '../components/IngredientSprite.astro';
+
+type Shape = 'tomato' | 'basil' | 'mozza' | 'olive' | 'chili' | 'mushroom' | 'salami' | 'garlic' | 'rucola';
 
 interface PizzaProto {
   id: string;
   name: string;
   price: number;
   desc: string;
-  /** Each ingredient: emoji + angle (deg) where it'll fly to around the plate */
-  ingredients: { emoji: string; angle: number; label: string }[];
+  ingredients: { shape: Shape; angle: number; label: string }[];
   badge?: 'heart' | 'spicy';
 }
 
@@ -18,10 +20,10 @@ const pizzas: PizzaProto[] = [
     price: 5.0,
     desc: 'Pomodoro, fiordilatte.',
     ingredients: [
-      { emoji: '🍅', angle: -50, label: 'Pomodoro' },
-      { emoji: '🧀', angle: 30,  label: 'Fiordilatte' },
-      { emoji: '🌿', angle: 130, label: 'Basilico' },
-      { emoji: '🫒', angle: 210, label: 'Olio EVO' },
+      { shape: 'tomato', angle: -50, label: 'Pomodoro' },
+      { shape: 'mozza',  angle: 30,  label: 'Fiordilatte' },
+      { shape: 'basil',  angle: 130, label: 'Basilico' },
+      { shape: 'olive',  angle: 210, label: 'Olio EVO' },
     ],
   },
   {
@@ -31,10 +33,10 @@ const pizzas: PizzaProto[] = [
     desc: 'Pomodoro, fiordilatte, spianata calabrese.',
     badge: 'spicy',
     ingredients: [
-      { emoji: '🍅', angle: -50, label: 'Pomodoro' },
-      { emoji: '🧀', angle: 30,  label: 'Fiordilatte' },
-      { emoji: '🌶️', angle: 130, label: 'Calabrese' },
-      { emoji: '🔥', angle: 210, label: 'Piccante' },
+      { shape: 'tomato', angle: -50, label: 'Pomodoro' },
+      { shape: 'mozza',  angle: 30,  label: 'Fiordilatte' },
+      { shape: 'salami', angle: 130, label: 'Calabrese' },
+      { shape: 'chili',  angle: 210, label: 'Pepperoncino' },
     ],
   },
   {
@@ -44,10 +46,10 @@ const pizzas: PizzaProto[] = [
     desc: "Pomodoro, stracciatella, prosciutto crudo d'Oggiono, rucola.",
     badge: 'heart',
     ingredients: [
-      { emoji: '🍅', angle: -50, label: 'Pomodoro' },
-      { emoji: '🧀', angle: 30,  label: 'Stracciatella' },
-      { emoji: '🥩', angle: 130, label: 'Crudo' },
-      { emoji: '🌿', angle: 210, label: 'Rucola' },
+      { shape: 'tomato', angle: -50, label: 'Pomodoro' },
+      { shape: 'mozza',  angle: 30,  label: 'Stracciatella' },
+      { shape: 'salami', angle: 130, label: 'Crudo' },
+      { shape: 'rucola', angle: 210, label: 'Rucola' },
     ],
   },
 ];
@@ -57,10 +59,12 @@ const priceFmt = (n: number) =>
 ---
 
 <BaseLayout title="Prototipo 2 — Ingredienti che esplodono" noindex={true}>
+  <IngredientSprite />
+
   <section class="relative min-h-[100vh] py-20 md:py-28 bg-gradient-to-b from-[var(--color-cream)] to-[var(--color-cream-warm)]">
     <div class="max-w-6xl mx-auto px-5 md:px-8">
       <header class="reveal text-center max-w-2xl mx-auto mb-16">
-        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-accent)]">Prototipo 2</p>
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-accent)]">Prototipo 2 · v2</p>
         <h1 class="mt-4 font-[family-name:var(--font-display)] font-bold text-4xl md:text-6xl">
           Ingredienti<br />
           <span class="italic font-normal text-[var(--color-accent)]">che esplodono.</span>
@@ -78,36 +82,30 @@ const priceFmt = (n: number) =>
             tabindex="0"
           >
             <!-- Plate / pizza visual -->
-            <div class="relative mx-auto aspect-square w-44 mb-5">
-              <!-- Pizza SVG -->
-              <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full" aria-hidden="true">
-                <circle cx="100" cy="100" r="98" fill="#3a2418" opacity="0.12" />
-                <circle cx="100" cy="100" r="94" fill="#d4a76a" />
-                <circle cx="100" cy="100" r="82" fill="#c33828" />
-                <ellipse cx="78" cy="80" rx="14" ry="11" fill="#fefef0" opacity="0.9" />
-                <ellipse cx="120" cy="92" rx="16" ry="12" fill="#fefef0" opacity="0.9" />
-                <ellipse cx="103" cy="120" rx="15" ry="11" fill="#fefef0" opacity="0.9" />
-                <ellipse cx="75" cy="120" rx="12" ry="10" fill="#fefef0" opacity="0.9" />
-                <ellipse cx="130" cy="130" rx="11" ry="9" fill="#fefef0" opacity="0.9" />
+            <div class="plate-wrap relative mx-auto aspect-square w-44 mb-5">
+              <svg viewBox="0 0 300 300" class="absolute inset-0 w-full h-full" aria-hidden="true">
+                <use href="#ing-pizza-plate" />
               </svg>
 
-              <!-- Ingredients that fly out on hover -->
+              <!-- Ingredients (realistic SVG) that fly out on hover -->
               {pizza.ingredients.map((ing) => (
                 <span
-                  class="ingredient absolute top-1/2 left-1/2 text-3xl select-none pointer-events-none"
+                  class="ingredient absolute top-1/2 left-1/2 select-none pointer-events-none w-12 h-12 -ml-6 -mt-6"
                   style={`--angle: ${ing.angle}deg;`}
                   aria-label={ing.label}
                 >
-                  {ing.emoji}
+                  <svg viewBox="0 0 100 100" class="w-full h-full" aria-hidden="true">
+                    <use href={`#ing-${ing.shape}`} />
+                  </svg>
                 </span>
               ))}
 
               <!-- Badge -->
               {pizza.badge === 'heart' && (
-                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-accent)] text-white text-xl shadow-lg">❤</span>
+                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-accent)] text-white text-xl shadow-lg z-10">❤</span>
               )}
               {pizza.badge === 'spicy' && (
-                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-700 text-lg shadow-lg">🌶</span>
+                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-700 text-lg shadow-lg z-10">🌶</span>
               )}
             </div>
 
@@ -126,7 +124,6 @@ const priceFmt = (n: number) =>
               </data>
             </div>
 
-            <!-- Subtle "hover me" hint that fades out on first interaction -->
             <p class="hint mt-3 text-center text-xs text-[var(--color-ink-soft)] italic opacity-70 transition-opacity group-hover:opacity-0">
               Passa sopra ↑
             </p>
@@ -135,16 +132,10 @@ const priceFmt = (n: number) =>
       </div>
 
       <div class="mt-16 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a
-          href="prototipo-1"
-          class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-[var(--color-ink)] text-white font-semibold hover:bg-black transition-colors"
-        >
+        <a href="prototipo-1" class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-[var(--color-ink)] text-white font-semibold hover:bg-black transition-colors">
           ← Vedi Prototipo 1
         </a>
-        <a
-          href={import.meta.env.BASE_URL}
-          class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white border border-black/10 text-[var(--color-ink)] font-semibold hover:bg-black/5 transition-colors"
-        >
+        <a href={import.meta.env.BASE_URL} class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-white border border-black/10 text-[var(--color-ink)] font-semibold hover:bg-black/5 transition-colors">
           Torna al sito
         </a>
       </div>
@@ -153,21 +144,20 @@ const priceFmt = (n: number) =>
 
   <style>
     .ingredient {
-      transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(0) rotate(calc(var(--angle, 0deg) * -1)) scale(0);
+      transform: translate(0, 0) rotate(var(--angle, 0deg)) translateX(0) rotate(calc(var(--angle, 0deg) * -1)) scale(0);
       opacity: 0;
       transition:
-        transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
         opacity 0.4s ease;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
     }
-    /* On hover or focus-within (keyboard) or .is-active (mobile tap), spread out */
     .pizza-card:hover .ingredient,
     .pizza-card:focus-within .ingredient,
     .pizza-card.is-active .ingredient {
-      transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(108px) rotate(calc(var(--angle, 0deg) * -1)) scale(1);
+      transform: translate(0, 0) rotate(var(--angle, 0deg)) translateX(108px) rotate(calc(var(--angle, 0deg) * -1)) scale(1);
       opacity: 1;
     }
-    /* Stagger: SVG is at position 1, so ingredients start at position 2 */
+    /* SVG is at position 1, so ingredients start at position 2 (no extra delay) */
     .pizza-card:hover .ingredient:nth-child(3),
     .pizza-card:focus-within .ingredient:nth-child(3),
     .pizza-card.is-active .ingredient:nth-child(3) { transition-delay: 0.06s; }
@@ -178,18 +168,28 @@ const priceFmt = (n: number) =>
     .pizza-card:focus-within .ingredient:nth-child(5),
     .pizza-card.is-active .ingredient:nth-child(5) { transition-delay: 0.18s; }
 
+    /* Subtle continuous wobble on the pizza plate while card is hovered */
+    @keyframes plate-wobble {
+      0%, 100% { transform: rotate(0deg); }
+      50%      { transform: rotate(2deg); }
+    }
+    .pizza-card:hover .plate-wrap > svg:first-child {
+      animation: plate-wobble 4s ease-in-out infinite;
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .ingredient { transition: opacity 0.2s ease; transform: translate(-50%, -50%) scale(1); }
+      .ingredient {
+        transition: opacity 0.2s ease;
+        transform: rotate(var(--angle, 0deg)) translateX(108px) rotate(calc(var(--angle, 0deg) * -1)) scale(1);
+        opacity: 1;
+      }
     }
   </style>
 
   <script>
-    // Mobile fallback — toggle .is-active on tap so cards work without hover
     document.querySelectorAll<HTMLElement>('.pizza-card').forEach((card) => {
       card.addEventListener('click', (e) => {
-        // Don't toggle if user clicked an actual link inside
         if ((e.target as HTMLElement).closest('a')) return;
-        // Only on touch devices (no hover capability)
         if (!window.matchMedia('(hover: hover)').matches) {
           card.classList.toggle('is-active');
         }

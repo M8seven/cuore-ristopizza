@@ -1,0 +1,198 @@
+---
+// Shared SVG sprite of realistic ingredient illustrations.
+// Render once per page, then reference via `<svg><use href="#ing-{shape}"/></svg>`.
+---
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Tomato (cherry) — glossy red with stem -->
+    <symbol id="ing-tomato" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="tomatoG" cx="35%" cy="32%">
+          <stop offset="0%" stop-color="#ff8a7a" />
+          <stop offset="55%" stop-color="#dc2828" />
+          <stop offset="100%" stop-color="#6b0f0f" />
+        </radialGradient>
+        <radialGradient id="tomatoHi" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="white" stop-opacity="0.7" />
+          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="50" cy="58" rx="40" ry="38" fill="url(#tomatoG)" />
+      <ellipse cx="38" cy="40" rx="16" ry="12" fill="url(#tomatoHi)" />
+      <path d="M44 22 Q50 14 56 22 L52 28 Q50 30 48 28 Z" fill="#1f7a2c" />
+      <path d="M50 22 L48 8 M50 22 L40 14 M50 22 L60 14" stroke="#1f7a2c" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    </symbol>
+
+    <!-- Basil leaf -->
+    <symbol id="ing-basil" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="basilG" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4ade80" />
+          <stop offset="60%" stop-color="#15803d" />
+          <stop offset="100%" stop-color="#0a4520" />
+        </linearGradient>
+      </defs>
+      <path d="M50 12 C 22 28, 18 60, 38 84 C 60 80, 80 56, 78 22 Q 65 16, 50 12 Z" fill="url(#basilG)" />
+      <path d="M50 14 Q 48 50, 40 82" stroke="#0a4520" stroke-width="1.5" fill="none" opacity="0.5" />
+      <path d="M48 28 Q 32 30, 26 42" stroke="#0a4520" stroke-width="1" fill="none" opacity="0.4" />
+      <path d="M48 50 Q 30 52, 26 64" stroke="#0a4520" stroke-width="1" fill="none" opacity="0.4" />
+      <path d="M52 30 Q 68 28, 72 38" stroke="#0a4520" stroke-width="1" fill="none" opacity="0.4" />
+      <path d="M52 52 Q 68 52, 72 62" stroke="#0a4520" stroke-width="1" fill="none" opacity="0.4" />
+      <ellipse cx="42" cy="32" rx="6" ry="4" fill="#86efac" opacity="0.5" />
+    </symbol>
+
+    <!-- Mozzarella ball -->
+    <symbol id="ing-mozza" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="mozzaG" cx="38%" cy="32%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="70%" stop-color="#fefdf6" />
+          <stop offset="100%" stop-color="#d6d2bf" />
+        </radialGradient>
+        <radialGradient id="mozzaHi" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="white" stop-opacity="0.95" />
+          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="42" fill="url(#mozzaG)" />
+      <ellipse cx="36" cy="36" rx="14" ry="10" fill="url(#mozzaHi)" />
+      <ellipse cx="62" cy="58" rx="6" ry="4" fill="white" opacity="0.5" />
+    </symbol>
+
+    <!-- Olive (nera) -->
+    <symbol id="ing-olive" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="oliveG" cx="35%" cy="30%">
+          <stop offset="0%" stop-color="#5e3a26" />
+          <stop offset="60%" stop-color="#2a1810" />
+          <stop offset="100%" stop-color="#0a0604" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="50" cy="50" rx="32" ry="40" fill="url(#oliveG)" />
+      <ellipse cx="40" cy="36" rx="8" ry="14" fill="white" opacity="0.18" />
+    </symbol>
+
+    <!-- Chili pepper -->
+    <symbol id="ing-chili" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="chiliG" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff5a3a" />
+          <stop offset="50%" stop-color="#dc2828" />
+          <stop offset="100%" stop-color="#7c1010" />
+        </linearGradient>
+      </defs>
+      <path d="M30 14 Q 24 26, 32 48 Q 44 78, 70 86 Q 78 78, 72 64 Q 52 36, 38 18 Q 34 12, 30 14 Z" fill="url(#chiliG)" />
+      <path d="M30 14 Q 24 26, 32 48 Q 44 78, 60 84" stroke="white" stroke-width="2" fill="none" opacity="0.35" />
+      <path d="M30 14 L 26 8 L 22 12 L 18 6 L 22 14 Z" fill="#1f7a2c" />
+      <circle cx="22" cy="12" r="2" fill="#0a4520" />
+    </symbol>
+
+    <!-- Mushroom (slice top-down) -->
+    <symbol id="ing-mushroom" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="mushG" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#f5e6d3" />
+          <stop offset="60%" stop-color="#c2a382" />
+          <stop offset="100%" stop-color="#6b4a2f" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="50" cy="50" rx="42" ry="40" fill="url(#mushG)" />
+      <path d="M30 50 Q50 30 70 50 Q50 70 30 50 Z" fill="#8b5e3b" opacity="0.4" />
+      <ellipse cx="50" cy="48" rx="6" ry="14" fill="#6b4a2f" opacity="0.5" />
+      <ellipse cx="38" cy="50" rx="3" ry="10" fill="#6b4a2f" opacity="0.35" />
+      <ellipse cx="62" cy="50" rx="3" ry="10" fill="#6b4a2f" opacity="0.35" />
+      <ellipse cx="40" cy="36" rx="10" ry="6" fill="white" opacity="0.25" />
+    </symbol>
+
+    <!-- Salami slice -->
+    <symbol id="ing-salami" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="salG" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#e57373" />
+          <stop offset="60%" stop-color="#b91c1c" />
+          <stop offset="100%" stop-color="#5a0c0c" />
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="42" fill="url(#salG)" />
+      <circle cx="50" cy="50" r="42" fill="none" stroke="#3a0808" stroke-width="2" opacity="0.4" />
+      <circle cx="38" cy="34" r="3.5" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="58" cy="40" r="2.5" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="44" cy="56" r="3" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="64" cy="62" r="2" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="34" cy="62" r="2" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="56" cy="70" r="2.5" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="68" cy="48" r="1.8" fill="#fbe7d4" opacity="0.85" />
+      <circle cx="40" cy="44" r="1.5" fill="#fbe7d4" opacity="0.85" />
+      <ellipse cx="40" cy="36" rx="10" ry="5" fill="white" opacity="0.18" />
+    </symbol>
+
+    <!-- Garlic clove -->
+    <symbol id="ing-garlic" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="garlicG" cx="40%" cy="30%">
+          <stop offset="0%" stop-color="#fffaf0" />
+          <stop offset="80%" stop-color="#ede0c4" />
+          <stop offset="100%" stop-color="#a08762" />
+        </radialGradient>
+      </defs>
+      <path d="M50 14 Q 24 32, 28 70 Q 36 88, 50 88 Q 64 88, 72 70 Q 76 32, 50 14 Z" fill="url(#garlicG)" />
+      <path d="M50 14 L 50 88" stroke="#a08762" stroke-width="1.5" opacity="0.4" />
+    </symbol>
+
+    <!-- Rucola (arugula leaf) -->
+    <symbol id="ing-rucola" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="rucolaG" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#65a30d" />
+          <stop offset="100%" stop-color="#1a4314" />
+        </linearGradient>
+      </defs>
+      <path d="M50 88 C 30 76, 20 56, 24 38 C 30 24, 38 18, 44 22 C 42 32, 46 44, 50 50 C 54 44, 58 32, 56 22 C 62 18, 70 24, 76 38 C 80 56, 70 76, 50 88 Z" fill="url(#rucolaG)" />
+      <path d="M50 88 L 50 30" stroke="#1a4314" stroke-width="1.5" opacity="0.5" />
+      <path d="M30 50 Q 36 46, 38 42" stroke="#1a4314" stroke-width="1" opacity="0.4" />
+      <path d="M70 50 Q 64 46, 62 42" stroke="#1a4314" stroke-width="1" opacity="0.4" />
+    </symbol>
+
+    <!-- Shared pizza plate (large, used as centerpiece) -->
+    <symbol id="ing-pizza-plate" viewBox="0 0 300 300">
+      <defs>
+        <radialGradient id="ppBoardShadow" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#3a2418" stop-opacity="0.35" />
+          <stop offset="80%" stop-color="#3a2418" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="ppCrust" cx="50%" cy="35%">
+          <stop offset="0%" stop-color="#f4cf95" />
+          <stop offset="65%" stop-color="#d4a76a" />
+          <stop offset="100%" stop-color="#9a6e3e" />
+        </radialGradient>
+        <radialGradient id="ppSauce" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#e85540" />
+          <stop offset="60%" stop-color="#c33828" />
+          <stop offset="100%" stop-color="#8a1a10" />
+        </radialGradient>
+        <radialGradient id="ppMozza" cx="35%" cy="30%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="80%" stop-color="#fef9eb" />
+          <stop offset="100%" stop-color="#d6d2bf" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="150" cy="158" rx="148" ry="146" fill="url(#ppBoardShadow)" />
+      <circle cx="150" cy="150" r="142" fill="url(#ppCrust)" />
+      <circle cx="150" cy="150" r="142" fill="none" stroke="#7a5429" stroke-width="0.5" opacity="0.5" />
+      <circle cx="150" cy="150" r="124" fill="url(#ppSauce)" />
+      <ellipse cx="118" cy="120" rx="22" ry="18" fill="url(#ppMozza)" />
+      <ellipse cx="180" cy="135" rx="26" ry="20" fill="url(#ppMozza)" />
+      <ellipse cx="155" cy="180" rx="24" ry="19" fill="url(#ppMozza)" />
+      <ellipse cx="105" cy="180" rx="20" ry="16" fill="url(#ppMozza)" />
+      <ellipse cx="195" cy="195" rx="18" ry="15" fill="url(#ppMozza)" />
+      <ellipse cx="135" cy="100" rx="14" ry="11" fill="url(#ppMozza)" />
+      <ellipse cx="60" cy="80" rx="4" ry="3" fill="#3a2418" opacity="0.55" />
+      <ellipse cx="240" cy="100" rx="3.5" ry="2.5" fill="#3a2418" opacity="0.55" />
+      <ellipse cx="220" cy="240" rx="4" ry="3" fill="#3a2418" opacity="0.55" />
+      <ellipse cx="80" cy="230" rx="3.5" ry="2.5" fill="#3a2418" opacity="0.55" />
+      <ellipse cx="160" cy="140" rx="5" ry="2" fill="white" opacity="0.3" />
+      <ellipse cx="120" cy="170" rx="4" ry="1.5" fill="white" opacity="0.3" />
+    </symbol>
+  </defs>
+</svg>
